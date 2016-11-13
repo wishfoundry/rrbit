@@ -77,8 +77,16 @@ export function defaultTo(dflt) {
 	}
 }
 
-export function getLast(jsArray) {
-	return jsArray[jsArray.length - 1];
+export function last(list) {
+	return list[list.length - 1];
+}
+
+export function first(list) {
+	return list[0];
+}
+
+function nth(offset, list) {
+	return list[ offset < 0 ? list.length + offset : offset ];
 }
 
 export function setLast(value, jsArray) {

@@ -58,7 +58,7 @@ export function from(iterable, mapFn = identity) {
 	var list = EMPTY;
 
 	for (var item of iterable) {
-		list = list.push(item);
+		list = list.push(mapFn(item));
 	}
 
 	return list;

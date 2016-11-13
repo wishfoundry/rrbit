@@ -1,6 +1,6 @@
 import {isLeaf, tableOf, tableLenOf, heightOf, lengthsOf, length} from './accessors';
 import {Node} from './Node';
-import {getLast, setLast, copy} from './functional';
+import {last, setLast, copy} from './functional';
 import {M, E} from './constants'
 /**
  * private util operations rrb lists use
@@ -124,19 +124,19 @@ export function unsafeSet(i, item, list) {
 
 
 // Navigation functions
-function botRight(a) {
-	return getLast(tableOf(a));
+export function lastSlot(node) {
+	return last(tableOf(node));
 }
 
-function botLeft(a) {
-	return tableOf(a)[0];
+export function firstSlot(node) {
+	return first(tableOf(node));
 }
 
 
 
 // Copies a node for updating. Note that you should not use this if
 // only updating only one of "table" or "lengths" for performance reasons.
-function nodeCopy(a) {
+export function nodeCopy(a) {
 	return new Node(heightOf(a), copy(tableOf(a)), (isLeaf(a) ? void 0: copy(lengthsOf(a))) );
 }
 
@@ -168,14 +168,14 @@ export function pushIfSpace(item, list) {
 	}
 
 	// Recursively push
-	var pushed = pushIfSpace(item, botRight(list));
+	var pushed = pushIfSpace(item, lastSlot(list));
 
 	// There was space in the bottom right tree, so the slot will
 	// be updated.
 	if (pushed !== null) {
 		var newA = nodeCopy(list);
 		setLast(pushed, tableOf(newA));
-		setLast(getLast(lengthsOf(newA)) + 1, lengthsOf(newA));
+		setLast(last(lengthsOf(newA)) + 1, lengthsOf(newA));
 		return newA;
 	}
 
@@ -187,7 +187,7 @@ export function pushIfSpace(item, list) {
 
 		return new Node(heightOf(list),
 			copy(tableOf(list)).concat(newSlot),
-			copy(lengthsOf(list)).concat(getLast(lengthsOf(list)) + length(newSlot))
+			copy(lengthsOf(list)).concat(last(lengthsOf(list)) + length(newSlot))
 		);
 	} else {
 		return null;

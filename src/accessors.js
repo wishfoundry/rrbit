@@ -1,5 +1,5 @@
 import {HEIGHT, LENGTHS, TABLE} from './constants';
-import {getLast} from './functional';
+import {last} from './functional';
 
 /*
  * private property accessors
@@ -42,5 +42,5 @@ export function isLeaf(node) {
 
 // get the # of elements in a rrb list
 export function length(list) {
-	return isLeaf(list) ? tableOf(list).length : getLast(lengthsOf(list));
+	return isLeaf(list) ? tableOf(list).length : last(lengthsOf(list));
 }
