@@ -1,5 +1,5 @@
 import {Node,EMPTY} from './Node';
-import {slice, curry} from './functional';
+import {slice, curry, identity} from './functional';
 import {isArray} from './is';
 import {M} from './constants';
 import {length} from './accessors'
@@ -54,20 +54,22 @@ export function one(item) {
  * accepts an single native array, varargs, or nothing(if an empty list is desired)
  *
  */
-export function of() {
-	var len = arguments.length;
+export function from(iterable, mapFn = identity) {
+	var list = EMPTY;
 
-	if (len == 0)
-		return EMPTY;
+	for (var item of iterable) {
+		list = list.push(item);
+	}
 
-	var first = arguments[0];
+	return list;
+}
 
-	// we assume if only one arg && is an array, to iterate over it
-	// THIS MAY BE WRONG(e.g. cannot create a list with 1 array element)
-	if (len == 1)
-		return isArray(first) ? fromArray(first) : one(first);
+export function of(first, ...rest) {
 
-	return fromArray(arguments);
+	if (rest && rest.length > 0)
+		return fromArray([first].concat(rest));
+
+	return one(first);
 }
 
 

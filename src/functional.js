@@ -60,7 +60,7 @@ export function flip(fn){
 
 export function always() { return true; }
 
-function identity(value) { return value; }
+export function identity(value) { return value; }
 
 export const attr = curry(function attr(key, obj) {
 	return obj[key];

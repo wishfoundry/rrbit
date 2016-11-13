@@ -47,7 +47,7 @@ describe("collection tests", function() {
 
 			var list;
 			expect(() => {
-				list = rrb.of(SIXTY_FOUR);
+				list = rrb.from(SIXTY_FOUR);
 
 				expect(list.toArray()).to.eql(SIXTY_FOUR);
 			}).to.not.throw();
@@ -56,7 +56,7 @@ describe("collection tests", function() {
 	});
 
 	it("can convert from an array", function() {
-		var list = rrb.of([1, 2, 3, 4]);
+		var list = rrb.from([1, 2, 3, 4]);
 
 		var values = [];
 		list.map(function(value, i) {
@@ -177,7 +177,7 @@ describe("collection tests", function() {
 
 	describe('slice', function() {
 		var list = rrb.of(1,2,3,4,5,6,7,8,9,10);
-		var big = rrb.of(SIXTY_FOUR);
+		var big = rrb.from(SIXTY_FOUR);
 
 		it("can slice lists", function() {
 			var front = rrb.slice(0, 5, list);

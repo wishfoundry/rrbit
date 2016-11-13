@@ -1,5 +1,5 @@
 import {length} from './accessors';
-import {of, one, empty, times} from './constructors';
+import {of, one, empty, times, from} from './constructors';
 import {Node, isListNode, EMPTY} from './Node';
 import {iteratorGen, tailIteratorGen, tailIterator, default as iterator} from './iterator';
 import * as ops from './operations';
@@ -79,6 +79,7 @@ export {
 	one,
 	empty,
 	times,
+	from,
 
 	length,
 
