@@ -1,6 +1,5 @@
 import {Node,EMPTY} from './Node';
-import {slice, curry, identity} from './functional';
-import {isArray} from './is';
+import {slice, identity} from './functional';
 import {M} from './constants';
 import {length} from './accessors'
 
@@ -65,6 +64,9 @@ export function from(iterable, mapFn = identity) {
 }
 
 export function of(first, ...rest) {
+
+	if (typeof first === 'undefined')
+		return EMPTY;
 
 	if (rest && rest.length > 0)
 		return fromArray([first].concat(rest));

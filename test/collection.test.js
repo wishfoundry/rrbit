@@ -1,4 +1,4 @@
-import * as rrb from '../src/index';
+import List from '../src/index';
 import {expect} from 'chai';
 
 describe("collection tests", function() {
@@ -18,7 +18,7 @@ describe("collection tests", function() {
 
 		it("can construct empty lists", function() {
 			expect(() => {
-				var l = rrb.empty();
+				var l = List.empty();
 			}).to.not.throw();
 
 		});
@@ -26,7 +26,7 @@ describe("collection tests", function() {
 		it("can construct list using of()", function() {
 			expect(() => {
 				//
-				var list = rrb.of(1, 2, 3, 4, 5);
+				var list = List.of(1, 2, 3, 4, 5);
 
 
 			}).to.not.throw();
@@ -35,19 +35,19 @@ describe("collection tests", function() {
 		it("can construct list from a native array", function() {
 			expect(() => {
 				//
-				var list = rrb.of([1, 2, 3, 4, 5]);
+				var list = List.of([1, 2, 3, 4, 5]);
 
 
 			}).to.not.throw();
 		});
 
 		it("can construct large lists", function() {
-			// rrb trees segment internally every 32 item
+			// List trees segment internally every 32 item
 			// we need to test if it works the same when sgemented
 
 			var list;
 			expect(() => {
-				list = rrb.from(SIXTY_FOUR);
+				list = List.from(SIXTY_FOUR);
 
 				expect(list.toArray()).to.eql(SIXTY_FOUR);
 			}).to.not.throw();
@@ -56,7 +56,7 @@ describe("collection tests", function() {
 	});
 
 	it("can convert from an array", function() {
-		var list = rrb.from([1, 2, 3, 4]);
+		var list = List.from([1, 2, 3, 4]);
 
 		var values = [];
 		list.map(function(value, i) {
@@ -69,39 +69,39 @@ describe("collection tests", function() {
 	});
 
 	it("can convert to an array", function() {
-		expect(rrb.of(1, 2, 3, 4, 5, 6).toArray()).to.eql([1, 2, 3, 4, 5, 6]);
+		expect(List.of(1, 2, 3, 4, 5, 6).toArray()).to.eql([1, 2, 3, 4, 5, 6]);
 	});
 
 	it("can convert empty list to an array", function() {
-		expect(rrb.empty().toArray()).to.eql([]);
+		expect(List.empty().toArray()).to.eql([]);
 	});
 
 	it("can reverse the order of a list", function() {
-		var list = rrb.of(1, 2, 3, 4, 5, 6);
+		var list = List.of(1, 2, 3, 4, 5, 6);
 		expect(list.reverse().toArray()).to.eql([6, 5, 4, 3, 2, 1])
 	});
 
 	it("can get by 0 index", function() {
-		var list = rrb.of("a", "b", "c", "d");
+		var list = List.of("a", "b", "c", "d");
 		expect(list.get(0)).to.eql("a");
 		expect(list.get(1)).to.eql("b");
 		expect(list.get(2)).to.eql("c");
 		expect(list.get(3)).to.eql("d");
 
-		expect(rrb.get(0, list)).to.eql("a");
-		expect(rrb.get(1, list)).to.eql("b");
-		expect(rrb.get(2, list)).to.eql("c");
-		expect(rrb.get(3, list)).to.eql("d");
+		expect(List.get(0, list)).to.eql("a");
+		expect(List.get(1, list)).to.eql("b");
+		expect(List.get(2, list)).to.eql("c");
+		expect(List.get(3, list)).to.eql("d");
 	});
 
 	it("can map over a list", function() {
-		var list = rrb.of(1, 2, 3, 4, 5, 6);
+		var list = List.of(1, 2, 3, 4, 5, 6);
 
-		expect(rrb.map(v => v + "i", list).toArray()).to.eql(['1i', '2i', '3i', '4i', '5i', '6i']);
+		expect(List.map(v => v + "i", list).toArray()).to.eql(['1i', '2i', '3i', '4i', '5i', '6i']);
 	});
 
 	it("can use js iterators over the list", function() {
-		var list = rrb.of(SIXTY_FOUR);
+		var list = List.of(SIXTY_FOUR);
 		var result = [];
 
 		for (var value of list) {
@@ -112,11 +112,11 @@ describe("collection tests", function() {
 	});
 
 	it("can slice a list", function() {
-		expect(rrb.of(1, 2, 3, 4, 5).slice(2).toArray()).to.eql([3, 4, 5])
+		expect(List.of(1, 2, 3, 4, 5).slice(2).toArray()).to.eql([3, 4, 5])
 	});
 
 	it("can show length", function() {
-		var list = rrb.of(1, 2, 3, 4, 5, 6);
+		var list = List.of(1, 2, 3, 4, 5, 6);
 
 		expect(list.length).to.equal(6);
 		expect(list.size()).to.equal(6);
@@ -137,8 +137,8 @@ describe("collection tests", function() {
 				return n + m;
 			}
 
-			var list = rrb.of(1, 2, 3, 4);
-			var sum = rrb.foldr(add, 0, list);
+			var list = List.of(1, 2, 3, 4);
+			var sum = List.foldr(add, 0, list);
 
 			expect(sum).to.equal(1 + 2 + 3 + 4);
 		});
@@ -149,7 +149,7 @@ describe("collection tests", function() {
 			}
 
 			// if order were wrong, might give c(b(a(x)))
-			expect(rrb.foldr(fn, 'x', rrb.of('a', 'b', 'c'))).to.equal('a(b(c(x)))');
+			expect(List.foldr(fn, 'x', List.of('a', 'b', 'c'))).to.equal('a(b(c(x)))');
 		});
 	});
 
@@ -160,8 +160,8 @@ describe("collection tests", function() {
 				return n + m;
 			}
 
-			var list = rrb.of(1, 2, 3, 4);
-			var sum = rrb.foldl(add, 0, list);
+			var list = List.of(1, 2, 3, 4);
+			var sum = List.foldl(add, 0, list);
 
 			expect(sum).to.equal(1 + 2 + 3 + 4);
 		});
@@ -171,19 +171,19 @@ describe("collection tests", function() {
 				return name + '(' + param + ')'
 			}
 
-			expect(rrb.foldl(fn, 'x', rrb.of('a', 'b', 'c'))).to.equal('c(b(a(x)))');
+			expect(List.foldl(fn, 'x', List.of('a', 'b', 'c'))).to.equal('c(b(a(x)))');
 		});
 	});
 
 	describe('slice', function() {
-		var list = rrb.of(1,2,3,4,5,6,7,8,9,10);
-		var big = rrb.from(SIXTY_FOUR);
+		var list = List.of(1,2,3,4,5,6,7,8,9,10);
+		var big = List.from(SIXTY_FOUR);
 
 		it("can slice lists", function() {
-			var front = rrb.slice(0, 5, list);
+			var front = List.slice(0, 5, list);
 			expect(front.length).to.equal(5);
 
-			var back = rrb.slice(5, 10, list);
+			var back = List.slice(5, 10, list);
 			expect(back.length).to.equal(5);
 		});
 
@@ -191,25 +191,25 @@ describe("collection tests", function() {
 
 			expect(big.length).to.equal(64);
 
-			var forw = rrb.slice(0, big.length / 2, big);
+			var forw = List.slice(0, big.length / 2, big);
 			expect(forw.size()).to.equal(32, "fail");
 
-			var aft = rrb.slice(big.length / 2, big);
+			var aft = List.slice(big.length / 2, big);
 			expect(aft.length).to.equal(32, "really fail");
 		});
 
 		it("can slice without a end arg", function() {
-			var tail = rrb.slice(5, list);
+			var tail = List.slice(5, list);
 			expect(tail.length).to.equal(5);
 		});
 	});
 
 	describe('append two lists to each other', function() {
-		var list = rrb.of(1,2,3,4,5,6,7,8,9,10);
-		var big = rrb.of(...SIXTY_FOUR);
+		var list = List.of(1,2,3,4,5,6,7,8,9,10);
+		var big = List.of(...SIXTY_FOUR);
 
 		it("can append to list together in correct order", function() {
-			var joined = rrb.append(big, list);
+			var joined = List.append(big, list);
 
 			expect(joined.length).to.equal(74);
 

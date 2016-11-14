@@ -1,6 +1,6 @@
 import {isLeaf, tableOf, tableLenOf, heightOf, lengthsOf, length} from './accessors';
 import {Node} from './Node';
-import {last, setLast, copy} from './functional';
+import {last, setLast, copy, first} from './functional';
 import {M, E} from './constants'
 /**
  * private util operations rrb lists use
@@ -31,7 +31,7 @@ export function sliceLeft(from, list) {
 		return new Node(0, listTable.slice(from, listTable.length + 1), void 0);
 
 	// Slice the left recursively.
-	var left = getSlot(from, list);
+	var left = findSlot(from, list);
 	var sliced = sliceLeft(from - (left > 0 ? lengthsOf(list)[left - 1] : 0), listTable[left]);
 
 	// Maybe the a node is not even needed, as sliced contains the whole slice.
@@ -62,7 +62,7 @@ export function sliceRight(to, list) {
 		return new Node(0, listTable.slice(0, to), void 0);
 
 	// Slice the right recursively.
-	var right = getSlot(to, list);
+	var right = findSlot(to, list);
 	var sliced = sliceRight(to - (right > 0 ? lengthsOf(list)[right - 1] : 0), listTable[right]);
 
 	// Maybe the a node is not even needed, as sliced contains the whole slice.
@@ -81,7 +81,7 @@ export function sliceRight(to, list) {
 
 // Calculates in which slot of "table" the item probably is, then
 // find the exact slot via forward searching in  "lengths". Returns the index.
-function getSlot(i, list) {
+function findSlot(i, list) {
 	var slot = i >> (5 * heightOf(list));
 	while (lengthsOf(list)[slot] <= i) {
 		slot++;
@@ -110,7 +110,7 @@ export function unsafeSet(i, item, list) {
 	if (isLeaf(list)) {
 		tableOf(list)[i] = item;
 	} else {
-		var slot = getSlot(i, list);
+		var slot = findSlot(i, list);
 		if (slot > 0) {
 			i -= lengthsOf(list)[slot - 1];
 		}
@@ -150,7 +150,8 @@ export function siblise(a, b) {
 	return new Node(heightOf(a) + 1, [a, b], [length(a), length(a) + length(b)]);
 }
 
-/** Recursively tries to push an item to the bottom-right most
+/**
+ * Recursively tries to push an item to the bottom-right most
  * tree possible. If there is no space left for the item,
  * null will be returned.
  * @param {*} item
@@ -158,10 +159,10 @@ export function siblise(a, b) {
  * @return {Node|null}
  */
 export function pushIfSpace(item, list) {
-	// Handle resursion stop at leaf level.
+	// Handle recursion stop at leaf level.
 	if (isLeaf(list)) {
 		if (tableOf(list).length < M) {
-			return new Node(0, tableOf(list).slice().concat(item), void 0);
+			return new Node(0, tableOf(list).concat(item), void 0);
 		}
 
 		return null;
@@ -186,8 +187,8 @@ export function pushIfSpace(item, list) {
 		var newSlot = createNodeWithHeight(item, heightOf(list) - 1);
 
 		return new Node(heightOf(list),
-			copy(tableOf(list)).concat(newSlot),
-			copy(lengthsOf(list)).concat(last(lengthsOf(list)) + length(newSlot))
+			tableOf(list).concat(newSlot),
+			lengthsOf(list).concat(last(lengthsOf(list)) + length(newSlot))
 		);
 	} else {
 		return null;
