@@ -12,6 +12,8 @@ import {
 	pushIfSpace,
 	createNodeWithHeight } from './internal';
 
+import {append} from './append'
+
 // A RRB-Tree has two distinct data types.
 // Leaf -> "height"  is always 0
 //         "table"   is an array of elements
@@ -46,9 +48,11 @@ export function reverse(list) {
  * @param listB
  * @return {*}
  */
-export function append(listA, listB) {
-	return foldl(push, listA, listB);
-}
+// export function append(listA, listB) {
+// 	return foldl(push, listA, listB);
+// }
+
+export {append}
 
 export function prepend(listA, listB) {
 	return append(listB, listA);
@@ -71,6 +75,28 @@ export function set(i, item, list) {
 		return list;
 	}
 	return unsafeSet(i, item, list);
+}
+
+function insertAt(i, item, list) {
+	// since slice is fast in rrb, try to use it instead of just filter
+	return append(push(sliceLeft(i, list), item), sliceRight(i, list))
+
+}
+
+function remove(i, list) {
+	return append(sliceLeft(i -1, list), sliceRight(i, list))
+}
+
+function removeItem(item, list) {
+	//do we filter or do we indexOf + slice?
+	// need to perf it
+
+	/*
+	var i = indexOf(item)
+	return i === -1 ? list : remove(i, list);
+	/*/
+	return filter(value => value === item, list);
+	//*/
 }
 
 
@@ -197,21 +223,21 @@ function find(predicate, list) {
 }
 
 function indexOf(value, list) {
-	// const table = tableOf(list);
-	// var i = table.length;
-	// if (isLeaf(list)) {
-	// 	while (i--) {
-	// 		if (table[i] === value)
-	// 		 return i;
-	// 	}
-	// } else {
-	// 	while (i--) {
-	// 		var subI = indexOf(value, table[i]);
-	// 		if (subI !== -1)
-	// 			return i + subI;
-	// 	}
-	// }
-	// return -1;
+	const table = tableOf(list);
+	var i = table.length;
+	if (isLeaf(list)) {
+		while (i--) {
+			if (table[i] === value)
+			 return i;
+		}
+	} else {
+		while (i--) {
+			var subI = indexOf(value, table[i]);
+			if (subI !== -1)
+				return i + subI;
+		}
+	}
+	return -1;
 }
 
 

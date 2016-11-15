@@ -1,7 +1,7 @@
 import {length} from './accessors';
 import {of, one, empty, times, from} from './constructors';
 import {Node as List, isListNode, EMPTY} from './Node';
-import {iteratorGen, tailIteratorGen, tailIterator, default as iterator} from './iterator';
+import {tailIterator, default as iterator} from './iterator';
 import * as ops from './operations';
 const {
 	push,
@@ -143,6 +143,4 @@ List[fl.concat]  = proto.concat;
 // one last thing to do now that we've finished modifying it
 Object.freeze(EMPTY);
 
-export {
-	List as default
-}
+export default List;

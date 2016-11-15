@@ -141,7 +141,7 @@ export function nodeCopy(a) {
 }
 
 // Recursively creates a tree that contains the given tree.
-function parentise(tree, height) {
+export function parentise(tree, height) {
 	return height === heightOf(tree) ? tree : new Node(height, [parentise(tree, height - 1)], [length(tree)]);
 }
 

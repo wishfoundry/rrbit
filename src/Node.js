@@ -1,12 +1,42 @@
 import {HEIGHT, LENGTHS, TABLE} from './constants';
 
-// A RRB-Tree has two distinct data types.
-// Leaf -> "height"  is always 0
-//         "table"   is an array of elements
-// Node -> "height"  is always greater than 0
-//         "table"   is an array of child nodes
-//         "lengths" is an array of accumulated lengths of the child nodes
+/**
+ * an RRB tree has two data types:
+ *
+ * Leaf
+ * - height is always 0
+ * - table is an collection of values
+ *
+ * Parent
+ * - height is always greater than 0
+ * - table is collection of child nodes
+ * - lengths is cache of accumulated lengths of children
+ *
+ * height and table are mandatory, lengths may be null
+ *
+ */
 
+/**
+ *
+ * @param {Array} table
+ * @return {Node}
+ * @constructor
+ */
+export function Leaf(table) {
+	return new Node(0, table, void 0);
+}
+
+/**
+ *
+ * @param {Number} height
+ * @param {Array<Node>} table
+ * @param {Array<number>} lengths
+ * @return {Node}
+ * @constructor
+ */
+export function Parent(height, table, lengths) {
+	return new Node(height, table, lengths);
+}
 
 /**
  * The base list class
@@ -39,4 +69,12 @@ export const EMPTY = Object.assign(new Node(0, []), {
 
 export function isListNode(item) {
 	return item instanceof Node;
+}
+
+export function isLeaf(node) {
+	return node[HEIGHT] === 0;
+}
+
+export function isParent(node) {
+	return node[HEIGHT] > 0;
 }
