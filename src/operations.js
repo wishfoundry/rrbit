@@ -77,26 +77,19 @@ export function set(i, item, list) {
 	return unsafeSet(i, item, list);
 }
 
-function insertAt(i, item, list) {
+export function insertAt(i, item, list) {
 	// since slice is fast in rrb, try to use it instead of just filter
 	return append(push(sliceLeft(i, list), item), sliceRight(i, list))
 
 }
 
-function remove(i, list) {
+export function removeAt(i, list) {
 	return append(sliceLeft(i -1, list), sliceRight(i, list))
 }
 
-function removeItem(item, list) {
-	//do we filter or do we indexOf + slice?
-	// need to perf it
-
-	/*
-	var i = indexOf(item)
+export function removeItem(item, list) {
+	var i = indexOf(item);
 	return i === -1 ? list : remove(i, list);
-	/*/
-	return filter(value => value === item, list);
-	//*/
 }
 
 
@@ -222,7 +215,7 @@ function find(predicate, list) {
 	}
 }
 
-function indexOf(value, list) {
+export function indexOf(value, list) {
 	const table = tableOf(list);
 	var i = table.length;
 	if (isLeaf(list)) {

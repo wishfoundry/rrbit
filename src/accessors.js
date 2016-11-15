@@ -1,4 +1,3 @@
-import {HEIGHT, LENGTHS, TABLE} from './constants';
 import {last} from './functional';
 
 /*
@@ -19,28 +18,28 @@ import {last} from './functional';
  * @return {Array<number>}
 */
 export function lengthsOf(list) {
-	return list[LENGTHS];
+	return list['@@rrb/lengths'];
 }
 
 export function heightOf(list) {
-	return list[HEIGHT];
+	return list['@@rrb/height'];
 }
 
 export function tableOf(list) {
-	return list[TABLE];
+	return list['@@rrb/table'];
 }
 
 export function tableLenOf(list) {
-	return list[TABLE].length;
+	return list['@@rrb/table'].length;
 }
 
 
 // determine if this is a leaf vs container node
 export function isLeaf(node) {
-	return node[HEIGHT] === 0;
+	return node['@@rrb/height'] === 0;
 }
 
 // get the # of elements in a rrb list
 export function length(list) {
-	return isLeaf(list) ? tableOf(list).length : last(lengthsOf(list));
+	return isLeaf(list) ? list['@@rrb/table'].length : last(list['@@rrb/lengths']);
 }

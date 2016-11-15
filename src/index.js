@@ -13,8 +13,13 @@ const {
 	filter,
 	foldr,
 	foldl,
+	insertAt,
+	removeAt,
+	removeItem,
+	indexOf,
 	reverse} = ops;
 import fl from 'fantasy-land';
+import {append as _append} from './_append'
 
 const $$iter = Symbol.iterator || "@@iterator";
 let proto = List.prototype;
@@ -30,6 +35,7 @@ List.times = times;
 List.lengthOf = length;
 List.push = push;
 List.append = append;
+List._append = _append;
 List.get = get;
 List.set = set;
 List.map = map;
@@ -38,6 +44,9 @@ List.filter = filter;
 List.foldr = foldr;
 List.foldl = foldl;
 List.reverse = reverse;
+List.removeAt = removeAt;
+List.removeItem = removeItem;
+List.indexOf = indexOf;
 
 
 

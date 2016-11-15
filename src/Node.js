@@ -1,4 +1,3 @@
-import {HEIGHT, LENGTHS, TABLE} from './constants';
 
 /**
  * an RRB tree has two data types:
@@ -46,9 +45,9 @@ export function Parent(height, table, lengths) {
  * @constructor
  */
 export function Node(height, table, lengths) {
-	this[LENGTHS] = lengths;
-	this[HEIGHT] = height;
-	this[TABLE] = table;
+	this['@@rrb/lengths'] = lengths;
+	this['@@rrb/height'] = height;
+	this['@@rrb/table'] = table;
 }
 
 Node.prototype.isEmpty  = () => false; // small optimization because all empty lists are the same element
@@ -72,9 +71,9 @@ export function isListNode(item) {
 }
 
 export function isLeaf(node) {
-	return node[HEIGHT] === 0;
+	return node['@@rrb/height'] === 0;
 }
 
 export function isParent(node) {
-	return node[HEIGHT] > 0;
+	return node['@@rrb/height'] > 0;
 }

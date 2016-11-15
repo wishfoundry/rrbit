@@ -1,4 +1,4 @@
-import {TABLE, HEIGHT, LENGTHS, E, M} from './constants';
+import {E, M} from './constants';
 import {tableOf, tableLenOf, heightOf, length, lengthsOf, isLeaf} from './accessors';
 import {parentise, siblise, nodeCopy, firstSlot, lastSlot} from './internal';
 import {Node} from './Node';
@@ -39,14 +39,14 @@ export function append(a, b) {
 
 		let aTable = tableOf(a2);
 		// Adjust .table and .lengths
-		a2[TABLE] = aTable.concat(tableOf(b2));
+		a2['@@rrb/table'] = aTable.concat(tableOf(b2));
 		if (heightOf(a2) > 0) {
 			var len = length(a2);
 			let lengths = lengthsOf(b2);
 			for (var i = 0, l = lengths.length; i < l; i++) {
 				lengths[i] += len;
 			}
-			a2[LENGTHS] = a2[LENGTHS].concat(lengths);
+			a2['@@rrb/lengths'] = a2['@@rrb/lengths'].concat(lengths);
 		}
 
 		return a2;
@@ -55,7 +55,7 @@ export function append(a, b) {
 	if (heightOf(a2) > 0) {
 		var toRemove = calcToRemove(a, b);
 		if (toRemove > E) {
-			[a2, b2] = rebalance(a2, b2, toRemove);
+			[a2, b2] = shuffle(a2, b2, toRemove);
 		}
 	}
 
@@ -109,7 +109,7 @@ function __append(a, b) {
 	if (toRemove <= E) {
 		return [a, b];
 	}
-	return rebalance(a, b, toRemove);
+	return shuffle(a, b, toRemove);
 }
 
 // Helperfunctions for __append. Replaces a child node at the side of the parent.
@@ -144,40 +144,40 @@ function insertLeft(parent, node) {
 
 /**
  * Returns an array of two balanced nodes.
- * @param {Node} left
- * @param {Node} right
+ * @param {Node} a
+ * @param {Node} b
  * @param {number} toRemove
  * @return {Array<Node>}
  */
-function rebalance(left, right, toRemove) {
-	var newA = preSizedNodeOf(heightOf(left), Math.min(M, tableLenOf(left) + tableLenOf(right) - toRemove));
-	var newB = preSizedNodeOf(heightOf(left), tableLenOf(newA) - (tableLenOf(left) + tableLenOf(right) - toRemove));
+function shuffle(a, b, toRemove) {
+	var newA = preSizedNodeOf(heightOf(a), Math.min(M, tableLenOf(a) + tableLenOf(b) - toRemove));
+	var newB = preSizedNodeOf(heightOf(a), tableLenOf(newA) - (tableLenOf(a) + tableLenOf(b) - toRemove));
 
 	// Skip the slots with size M. More precise: copy the slot references
 	// to the new node
 	var read = 0;
-	while (tableOf(getEither(tableOf(left), tableOf(left), read)).length % M === 0) {
-		setEither(tableOf(newA), tableOf(newB), read, getEither(tableOf(left), tableOf(right), read));
-		setEither(lengthsOf(newA), lengthsOf(newB), read, getEither(lengthsOf(left), lengthsOf(right), read));
+	while (tableOf(getEither(tableOf(a), tableOf(a), read)).length % M === 0) {
+		setEither(tableOf(newA), tableOf(newB), read, getEither(tableOf(a), tableOf(b), read));
+		setEither(lengthsOf(newA), lengthsOf(newB), read, getEither(lengthsOf(a), lengthsOf(b), read));
 		read++;
 	}
 
-	// Pulling items from left to right, caching in left slot before writing
+	// Pulling items from left to right, caching in a slot before writing
 	// it into the new nodes.
 	var write = read;
-	var slot = preSizedNodeOf(heightOf(left) - 1, 0);
+	var slot = preSizedNodeOf(heightOf(a) - 1, 0);
 	var from = 0;
 
 	// If the current slot is still containing data, then there will be at
 	// least one more write, so we do not break this loop yet.
 	while (read - write - (tableLenOf(slot) > 0 ? 1 : 0) < toRemove) {
 		// Find out the max possible items for copying.
-		var source = getEither(tableOf(left), tableOf(right), read);
+		var source = getEither(tableOf(a), tableOf(b), read);
 		var to = Math.min(M - tableLenOf(slot), tableLenOf(source));
 
 		// Copy and adjust size table.
-		slot[TABLE] = tableOf(slot).concat(tableOf(source).slice(from, to));
-		if (slot[HEIGHT] > 0) {
+		slot['@@rrb/table'] = tableOf(slot).concat(tableOf(source).slice(from, to));
+		if (slot['@@rrb/height'] > 0) {
 			let lengths = lengthsOf(slot);
 			var len = lengths.length;
 			for (var i = len; i < len + to - from; i++) {
@@ -195,10 +195,10 @@ function rebalance(left, right, toRemove) {
 			from = 0;
 		}
 
-		// Only create left new slot if the current one is filled up.
+		// Only create a new slot if the current one is filled up.
 		if (tableLenOf(slot) === M) {
 			saveSlot(newA, newB, write, slot);
-			slot = preSizedNodeOf(heightOf(left) - 1, 0);
+			slot = preSizedNodeOf(heightOf(a) - 1, 0);
 			write++;
 		}
 	}
@@ -210,8 +210,8 @@ function rebalance(left, right, toRemove) {
 	}
 
 	// Shift the untouched slots to the left
-	while (read < tableLenOf(left) + tableLenOf(right)) {
-		saveSlot(newA, newB, write, getEither(tableOf(left), tableOf(right), read));
+	while (read < tableLenOf(a) + tableLenOf(b)) {
+		saveSlot(newA, newB, write, getEither(tableOf(a), tableOf(b), read));
 		read++;
 		write++;
 	}
@@ -220,7 +220,7 @@ function rebalance(left, right, toRemove) {
 }
 
 // Creates a node or leaf with a given length at their arrays for performance.
-// Is only used by rebalance.
+// Is only used by shuffle.
 function preSizedNodeOf(height, length) {
 	if (height > 0)
 		return new Node(length, new Array(length), new Array(length));
