@@ -31,6 +31,7 @@ export function append(a, b) {
 	var bTable = b['@@rrb/table'];
 	var aTableLen = aTable.length;
 	var bTableLen = bTable.length;
+
 	if (aTableLen === 0) return b;
 	if (bTableLen === 0) return a;
 
@@ -88,29 +89,29 @@ function __append(a, b) {
 		if (aHeight === bHeight) {
 			a = nodeCopy(a);
 			b = nodeCopy(b);
-			var _  = __append(lastSlot(a), firstSlot(b));
-			var a0 = _[0];
-			var b0 = _[1];
+			var tuple  = __append(lastSlot(a), firstSlot(b));
+			var a0 = tuple[0];
+			var b0 = tuple[1];
 
 				insertRight(a, b0);
 			insertLeft(b, a0);
 
 		} else if (aHeight > bHeight) {
 			a = nodeCopy(a);
-			var _ = __append(lastSlot(a), b);
-			var a0 = _[0];
-			var b0 = _[1];
+			var tuple = __append(lastSlot(a), b);
+			var a0 = tuple[0];
+			var b0 = tuple[1];
 
 			insertRight(a, a0);
 			b = parentise(b0, b0['@@rrb/height'] + 1);
 		} else {
 			b = nodeCopy(b);
-			var _ = __append(a, firstSlot(b));
+			var tuple = __append(a, firstSlot(b));
 
-			var left = tableLenOf(_[0]) === 0 ? 0 : 1;
+			var left = tableLenOf(tuple[0]) === 0 ? 0 : 1;
 			var right = left === 0 ? 1 : 0;
-			insertLeft(b, _[left]);
-			a = parentise(_[right], _[right]['@@rrb/height'] + 1);
+			insertLeft(b, tuple[left]);
+			a = parentise(tuple[right], tuple[right]['@@rrb/height'] + 1);
 		}
 	}
 
