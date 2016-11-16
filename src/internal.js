@@ -147,7 +147,7 @@ export function parentise(tree, height) {
 
 // Emphasizes blood brotherhood beneath two trees.
 export function siblise(a, b) {
-	return new Node(heightOf(a) + 1, [a, b], [length(a), length(a) + length(b)]);
+	return new Node(a['@@rrb/height'] + 1, [a, b], [length(a), length(a) + length(b)]);
 }
 
 /**

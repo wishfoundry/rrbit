@@ -20,7 +20,7 @@ export function compose() {
 
 export function curry(fn) {
 
-	return function() {
+	return function currydFn() {
 		return _currify(fn, _slice.call(arguments), fn.length - arguments.length)
 	}
 }

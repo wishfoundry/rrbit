@@ -27,22 +27,29 @@ import {Node} from './Node';
  * @return {Node}
  */
 export function append(a, b) {
-	if (tableLenOf(a) === 0) return b;
-	if (tableLenOf(b) === 0) return a;
+	var aTable = a['@@rrb/table'];
+	var bTable = b['@@rrb/table'];
+	var aTableLen = aTable.length;
+	var bTableLen = bTable.length;
+	if (aTableLen === 0) return b;
+	if (bTableLen === 0) return a;
 
 	var [a2, b2] = __append(a, b);
+	var a2Table = a2['@@rrb/table'];
+	var b2Table = b2['@@rrb/table'];
+	var a2TableLen = a2Table.length;
+	var b2TableLen = b2Table.length;
 
 	// Check if both nodes can be crunshed together.
-	if (tableLenOf(a2) + tableLenOf(b2) <= M) {
-		if (tableOf(a2).length === 0) return b2;
-		if (tableOf(b2).length === 0) return a2;
+	if (a2TableLen + b2TableLen <= M) {
+		if (a2Table.length === 0) return b2;
+		if (b2Table.length === 0) return a2;
 
-		let aTable = tableOf(a2);
 		// Adjust .table and .lengths
-		a2['@@rrb/table'] = aTable.concat(tableOf(b2));
-		if (heightOf(a2) > 0) {
+		a2['@@rrb/table'] = a2Table.concat(b2Table);
+		if (a2['@@rrb/height'] > 0) {
 			var len = length(a2);
-			let lengths = lengthsOf(b2);
+			var lengths = lengthsOf(b2);
 			for (var i = 0, l = lengths.length; i < l; i++) {
 				lengths[i] += len;
 			}
@@ -52,7 +59,7 @@ export function append(a, b) {
 		return a2;
 	}
 
-	if (heightOf(a2) > 0) {
+	if (a2['@@rrb/height'] > 0) {
 		var toRemove = calcToRemove(a, b);
 		if (toRemove > E) {
 			[a2, b2] = shuffle(a2, b2, toRemove);
@@ -70,33 +77,40 @@ export function append(a, b) {
  * @private
  */
 function __append(a, b) {
-	if (isLeaf(a) && isLeaf(b)) {
+	var aHeight = a['@@rrb/height'];
+	var bHeight = b['@@rrb/height'];
+
+	if (aHeight == 0 && bHeight == 0) {
 		return [a, b];
 	}
 
-	if (heightOf(a) !== 1 || heightOf(b) !== 1) {
-		if (heightOf(a) === heightOf(b)) {
+	if (aHeight !== 1 || bHeight !== 1) {
+		if (aHeight === bHeight) {
 			a = nodeCopy(a);
 			b = nodeCopy(b);
-			let [a0, b0]  = __append(lastSlot(a), firstSlot(b));
+			var _  = __append(lastSlot(a), firstSlot(b));
+			var a0 = _[0];
+			var b0 = _[1];
 
-			insertRight(a, b0);
+				insertRight(a, b0);
 			insertLeft(b, a0);
 
-		} else if (heightOf(a) > heightOf(b)) {
+		} else if (aHeight > bHeight) {
 			a = nodeCopy(a);
-			let [a0, b0] = __append(lastSlot(a), b);
+			var _ = __append(lastSlot(a), b);
+			var a0 = _[0];
+			var b0 = _[1];
 
 			insertRight(a, a0);
-			b = parentise(b0, heightOf(b0) + 1);
+			b = parentise(b0, b0['@@rrb/height'] + 1);
 		} else {
 			b = nodeCopy(b);
-			let appended = __append(a, firstSlot(b));
+			var _ = __append(a, firstSlot(b));
 
-			var left = tableLenOf(appended[0]) === 0 ? 0 : 1;
+			var left = tableLenOf(_[0]) === 0 ? 0 : 1;
 			var right = left === 0 ? 1 : 0;
-			insertLeft(b, appended[left]);
-			a = parentise(appended[right], heightOf(appended[right]) + 1);
+			insertLeft(b, _[left]);
+			a = parentise(_[right], _[right]['@@rrb/height'] + 1);
 		}
 	}
 
@@ -120,21 +134,21 @@ function insertRight(parent, node) {
 }
 
 function insertLeft(parent, node) {
-	let lengths = lengthsOf(parent);
-	let table = tableOf(parent);
+	var lengths = lengthsOf(parent);
+	var table = tableOf(parent);
 
 	if (tableLenOf(node) > 0) {
 		table[0] = node;
 		lengths[0] = length(node);
 
 		var len = length(table[0]);
-		for (let i = 1, l = lengths.length; l > i; i++) {
+		for (var i = 1, l = lengths.length; l > i; i++) {
 			lengths[i] = len = (len += length(table[i]));
 		}
 
 	} else {
 		table.shift();
-		for (let i = 1, l = lengths.length; l > i; i++) {
+		for (var i = 1, l = lengths.length; l > i; i++) {
 			lengths[i] = lengths[i] - lengths[0];
 		}
 		lengths.shift();
@@ -178,7 +192,7 @@ function shuffle(a, b, toRemove) {
 		// Copy and adjust size table.
 		slot['@@rrb/table'] = tableOf(slot).concat(tableOf(source).slice(from, to));
 		if (slot['@@rrb/height'] > 0) {
-			let lengths = lengthsOf(slot);
+			var lengths = lengthsOf(slot);
 			var len = lengths.length;
 			for (var i = len; i < len + to - from; i++) {
 				lengths[i] = length(tableOf(slot)[i]);
@@ -238,8 +252,8 @@ function preSizedNodeOf(height, length) {
 function saveSlot(aList, bList, index, slot) {
 	setEither(tableOf(aList), tableOf(bList), index, slot);
 
-	let isInFirst = (index === 0 || index === lengthsOf(aList).length);
-	let len = isInFirst ? 0 : getEither(lengthsOf(aList), lengthsOf(aList), index - 1);
+	var isInFirst = (index === 0 || index === lengthsOf(aList).length);
+	var len = isInFirst ? 0 : getEither(lengthsOf(aList), lengthsOf(aList), index - 1);
 
 	setEither(lengthsOf(aList), lengthsOf(bList), index, len + length(slot));
 }
@@ -265,17 +279,18 @@ function setEither(a, b, i, value) {
  * @return {number}
  */
 function calcToRemove(a, b) {
-	var aTable = tableOf(a);
-	var bTable = tableOf(b);
+	var aTable = a['@@rrb/table'];
+	var bTable = b['@@rrb/table'];
 	var subLengths = sumOfLengths(aTable) + sumOfLengths(bTable);
 
 	return (aTable.length + bTable.length) - (Math.floor((subLengths - 1) / M) + 1);
 }
 
 function sumOfLengths(table) {
-	var sum = 0, len = table.length;
+	var sum = 0;
+	var len = table.length;
 	for (var i = 0; len > i; i++)
-		sum += tableLenOf(table[i]);
+		sum += table[i]['@@rrb/table'].length;
 
 	return sum;
 }
