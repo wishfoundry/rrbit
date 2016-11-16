@@ -45,6 +45,12 @@ suite
 	.add('native concat', function() {
 		var list = LRG.concat(LRG);
 	})
+	.add('native push', function() {
+		var list = LRG.slice(0);
+		for (var i = 0, len = LRG.length; len > i; i++) {
+			list.push(LRG[i])
+		}
+	})
 	.add('mori', function() {
 		var list = mori.concat(BASE.mori, BASE.mori)
 	})

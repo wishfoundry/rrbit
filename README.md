@@ -33,9 +33,26 @@ RRBit vectors also implement [Fantasy Land](https://github.com/fantasyland/fanta
 [Static Land](https://github.com/rpominov/static-land) expected to follow soon
  
  
- TODO:
+ ###TODO:
  * explore compatibility with common JS libs(e.g. ramda uses a different curry signature)
- * publish performance results
- * finish the high performance `append` functionality
+ * tune and publish performance results
  * restructure project for smaller es6 module builds
  * dethrone ImmutableJS ftw!
+ 
+ 
+ ### Performance
+ performance tuning is a long way from complete, and any published results at this point are mostly meaningless 
+ 
+ however... some things are showing some promise:
+ 
+ ```
+ appending two identical lists together
+ -------------------------------------------------------
+ immutable-js               38.33 op/s ±  2.69%   (50 samples)
+ seamless-immutable         13.63 op/s ±  4.18%   (38 samples)
+ native concat            1072.89 op/s ±  6.73%   (73 samples)
+ native slice()+push()     227.34 op/s ±  7.04%   (75 samples)
+ mori                 18446134.21 op/s ±  2.09%   (82 samples)
+ rrbit                 3862109.71 op/s ±  1.85%   (89 samples)
+ -------------------------------------------------------
+```
