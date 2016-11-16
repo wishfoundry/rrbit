@@ -1,4 +1,4 @@
-import {Node,EMPTY} from './Node';
+import {Node,EMPTY, isNode} from './Node';
 import {slice, identity} from './functional';
 import {M} from './constants';
 import {length} from './accessors'
@@ -55,6 +55,10 @@ export function one(item) {
  */
 export function from(iterable, mapFn) {
 	var list = EMPTY;
+
+	if (isNode(iterable)) {
+		return iterable;
+	}
 
 	// use more performant, pre-allocation technique when possible
 	if (Array.isArray(iterable)) {

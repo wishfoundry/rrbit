@@ -70,6 +70,10 @@ export function isListNode(item) {
 	return item instanceof Node;
 }
 
+export function isNode(item) {
+	return item instanceof Node;
+}
+
 export function isLeaf(node) {
 	return node['@@rrb/height'] === 0;
 }
