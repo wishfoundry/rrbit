@@ -195,9 +195,17 @@ export const filter = curry(function filter(fn, list) {
  * @param list
  */
 export function slice(from, to, list) {
+
+	var max = length(list);
+	if (from >= max){
+		return empty;
+	}
+	if (to >= max - 1){
+		to = max;
+	}
 	//invert negative numbers
 	function confine(i) {
-		return i < 0 ? (i + length(list)) : i;
+		return i < 0 ? (i + max) : i;
 	}
 
 	if (isListNode(to)) {
@@ -231,6 +239,14 @@ export function indexOf(value, list) {
 		}
 	}
 	return -1;
+}
+
+export function isMember(item, list) {
+	return indexOf(item, list) !== -1;
+}
+
+export function intersperse(separator, list) {
+
 }
 
 

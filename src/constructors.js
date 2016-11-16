@@ -53,11 +53,23 @@ export function one(item) {
  * accepts an single native array, varargs, or nothing(if an empty list is desired)
  *
  */
-export function from(iterable, mapFn = identity) {
+export function from(iterable, mapFn) {
 	var list = EMPTY;
 
-	for (var item of iterable) {
-		list = list.push(mapFn(item));
+	// use more performant, pre-allocation technique when possible
+	if (Array.isArray(iterable)) {
+		return !mapFn ? fromArray(iterable) : times((i) => mapFn(iterable[i], i), iterable.length);
+	}
+
+	// if length is unknown, just use push
+	if (mapFn) {
+		for (var item of iterable) {
+			list = list.push(mapFn(item));
+		}
+	} else {
+		for (var item of iterable) {
+			list = list.push(item);
+		}
 	}
 
 	return list;
@@ -85,6 +97,9 @@ export function of(first, ...rest) {
 export function times(fn, len) {
 	if (len <= 0)
 		return empty();
+
+	// just iterating over push() isn't terribly fast...
+	// we attempt to optimize here by pre-allocating
 
 	var height = Math.floor( Math.log(len) / Math.log(M) );
 	return populate(fn, height, 0, len);
@@ -116,4 +131,9 @@ export function times(fn, len) {
 		}
 		return _leaf(table);
 	}
+}
+
+function range(from, to) {
+	var len = to - from;
+	return times((i) => from + i, len);
 }
