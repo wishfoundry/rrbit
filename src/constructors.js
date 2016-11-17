@@ -137,7 +137,7 @@ export function times(fn, len) {
 	}
 }
 
-function range(from, to) {
+export function range(from, to) {
 	var len = to - from;
 	return times((i) => from + i, len);
 }

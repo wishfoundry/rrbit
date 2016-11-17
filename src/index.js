@@ -1,5 +1,5 @@
 import {length} from './accessors';
-import {of, one, empty, times, from} from './constructors';
+import {of, one, empty, times, from, range} from './constructors';
 import {Node as List, isListNode, EMPTY} from './Node';
 import {tailIterator, default as iterator} from './iterator';
 import * as ops from './operations';
@@ -19,7 +19,6 @@ const {
 	indexOf,
 	reverse} = ops;
 import fl from 'fantasy-land';
-import {append as _append} from './_append'
 
 const $$iter = Symbol.iterator || "@@iterator";
 let proto = List.prototype;
@@ -31,11 +30,11 @@ List.of = of;
 List.from = from;
 List.empty = empty;
 List.times = times;
+List.range = range;
 //node.length is reserved, us lengthOf instead
 List.lengthOf = length;
 List.push = push;
 List.append = append;
-List._append = _append;
 List.get = get;
 List.set = set;
 List.map = map;

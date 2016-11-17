@@ -165,8 +165,8 @@ function insertLeft(parent, node) {
  * @return {Array<Node>}
  */
 function shuffle(a, b, toRemove) {
-	var newA = preSizedNodeOf(heightOf(a), Math.min(M, tableLenOf(a) + tableLenOf(b) - toRemove));
-	var newB = preSizedNodeOf(heightOf(a), tableLenOf(newA) - (tableLenOf(a) + tableLenOf(b) - toRemove));
+	var newA = allocate(heightOf(a), Math.min(M, tableLenOf(a) + tableLenOf(b) - toRemove));
+	var newB = allocate(heightOf(a), tableLenOf(newA) - (tableLenOf(a) + tableLenOf(b) - toRemove));
 
 	// Skip the slots with size M. More precise: copy the slot references
 	// to the new node
@@ -180,7 +180,7 @@ function shuffle(a, b, toRemove) {
 	// Pulling items from left to right, caching in a slot before writing
 	// it into the new nodes.
 	var write = read;
-	var slot = preSizedNodeOf(heightOf(a) - 1, 0);
+	var slot = allocate(heightOf(a) - 1, 0);
 	var from = 0;
 
 	// If the current slot is still containing data, then there will be at
@@ -213,7 +213,7 @@ function shuffle(a, b, toRemove) {
 		// Only create a new slot if the current one is filled up.
 		if (tableLenOf(slot) === M) {
 			saveSlot(newA, newB, write, slot);
-			slot = preSizedNodeOf(heightOf(a) - 1, 0);
+			slot = allocate(heightOf(a) - 1, 0);
 			write++;
 		}
 	}
@@ -236,7 +236,7 @@ function shuffle(a, b, toRemove) {
 
 // Creates a node or leaf with a given length at their arrays for performance.
 // Is only used by shuffle.
-function preSizedNodeOf(height, length) {
+function allocate(height, length) {
 	if (height > 0)
 		return new Node(length, new Array(length), new Array(length));
 
