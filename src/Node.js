@@ -1,4 +1,4 @@
-
+import {length} from './accessors';
 /**
  * an RRB tree has two data types:
  *
@@ -51,6 +51,7 @@ export function Node(height, table, lengths) {
 }
 
 Node.prototype.isEmpty  = () => false; // small optimization because all empty lists are the same element
+Node.prototype.size     = function() { return length(this); };
 
 Object.defineProperty(Node.prototype, 'length', {
 	get() {
@@ -61,10 +62,10 @@ Object.defineProperty(Node.prototype, 'length', {
 	}
 });
 
-export const EMPTY = Object.assign(new Node(0, []), {
+export const EMPTY = Object.freeze(Object.assign(new Node(0, [], void 0), {
 	isEmpty() { return true; },
 	size() { return 0; }
-});
+}));
 
 export function isListNode(item) {
 	return item instanceof Node;

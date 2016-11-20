@@ -1,0 +1,17 @@
+import './append';
+import './caseOf';
+import './filter';
+import './find';
+import './foldl';
+import './foldr';
+import './get';
+import './indexOf';
+import './insertAt';
+import './intersperse';
+import './map';
+import './prepend';
+import './push';
+import './removeAt';
+import './reverse';
+import './set';
+import './slice';

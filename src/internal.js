@@ -196,7 +196,10 @@ export function pushIfSpace(item, list) {
 }
 
 
+export function push(item, list) {
 
+	return pushIfSpace(item, list) || siblise(list, createNodeWithHeight(item, heightOf(list)));
+}
 
 
 
