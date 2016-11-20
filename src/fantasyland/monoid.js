@@ -18,3 +18,9 @@
  empty must return a value of the same Monoid
 
  */
+
+import fl from 'fantasy-land';
+import {Node as List} from '../Node';
+import empty from '../create/empty';
+
+List[fl.empty] = List.prototype[fl.empty] = empty;

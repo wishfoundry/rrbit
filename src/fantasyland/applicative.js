@@ -45,15 +45,23 @@
  */
 
 import fl from 'fantasy-land';
-import {Node as List, isNode} from '../Node';
-import {append} from '../append';
-import {push} from '../internal';
+import {Node as List} from '../Node';
+import one from '../create/one';
 
 
-List[fl.ap]  = function(values) {
+function ofOne(item) {
+	return one(item);
+}
+
+function ap(values) {
 	return this.map(fn => values.map(fn));
-};
+}
 
-// List.prototype.ap = function(other) {
+// required on all instances for Applicative compat
+List.prototype.of = List.prototype[fl.of] = ofOne;
+List[fl.ap] = List.prototype.ap = List.prototype[fl.ap] = ap;
+
+
+// List.prototype.ap = List.prototype[fl.ap] = function ap(other) {
 // 	return this.map(f => other.map(x => f(x))).flatten()
-// }
+// };

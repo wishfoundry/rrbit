@@ -18,23 +18,20 @@
  *
  */
 
-// import fl from 'fantasy-land';
-// import {Node as List, isNode} from '../Node';
-// import {append} from '../append';
-// import {push} from '../internal';
-//
-//
-// function _concat(thing, list) {						// Semigroup compat
-// 	if (isNode(thing))
-// 		return append(list, thing); // if a semigroup is provided, must return same type
-//
-// 	return push(thing, list); // if not a semigroup, behavior is not specified
-// }
-//
-// List.prototype.concat = function (value) {
-// 	return _concat(value, this);
-// };
-//
-// List.prototype[fl.concat] = function (value) {
-// 	return _concat(value, this);
-// };
+import fl from 'fantasy-land';
+import {Node as List, isNode} from '../Node';
+import {append} from '../append';
+import {push} from '../internal';
+
+function _concat(thing, list) {						// Semigroup compat
+	if (isNode(thing))
+		return append(list, thing); // if a semigroup is provided, must return same type
+
+	return push(thing, list); // if not a semigroup, behavior is not specified
+}
+
+function concat(value) {
+	return _concat(value, this);
+}
+
+List.prototype[fl.concat] = List.prototype.concat = concat;

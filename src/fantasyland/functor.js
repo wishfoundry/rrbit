@@ -17,3 +17,11 @@
  map must return a value of the same Functor
  *
  */
+
+import fl from 'fantasy-land';
+import {Node as List} from '../Node';
+
+List.prototype[fl.map] = function(fn) {
+	//our standard map provides arguments, but pure functional map is only 1
+	return this.map((value, i) => fn(value));
+};
