@@ -18,7 +18,7 @@ var BASE = {
 	'immutable': Imm.fromJS(LRG),
 	'seamless': seamless.from(LRG),
 	'mori': mori.toClj(LRG),
-	'rrb': List.of(LRG)
+	'rrb': List.from(LRG)
 
 }
 
