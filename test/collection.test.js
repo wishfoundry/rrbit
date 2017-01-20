@@ -228,4 +228,43 @@ describe("collection tests", function() {
 			expect(joined.get(54)).to.equal(54);
 		});
 	});
+
+	describe("errors with multiples of 32", function() {
+
+		it("can work append powers of 32", function() {
+			var k1 = List.range(0,1000);
+			k1.append(List.range(0,1000));
+
+		});
+
+		it("can work append powers of 32", function() {
+			var len = 32;
+			var k32 = List.times(v => v, len);
+
+			List.append(k32.slice(1, 32), k32.slice(len + 1, -1))
+
+		});
+
+		it("slice repeatedly", function() {
+			var n = 31;
+
+			var x = List.range(0, 40*n);
+			x = List.slice(n, 4*n, x);
+			x = List.slice(n, 3*n, x);
+			x = List.slice(n, 2*n, x);
+			x = List.slice(n, n, x);
+
+		});
+
+		it("powers of 32", function() {
+			var x = List.append(List.one(1), List.range(0, Math.pow(32,2) - 32 + 1));
+				x = List.append(List.one(1), List.range(0, Math.pow(32,3) - 32 + 1));
+				x = List.append(List.one(1), List.range(0, Math.pow(32,4) - 32 + 1));
+		});
+
+		it("smaller powers of 32", function() {
+			var x = List.append(List.one(1), List.range(0, 960 + 2));
+				x = List.append(List.one(1), List.range(0, 963 + 1));
+		});
+	})
 });

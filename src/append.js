@@ -282,7 +282,9 @@ function setEither(a, b, i, value) {
 function calcToRemove(a, b) {
 	var aTable = a['@@rrb/table'];
 	var bTable = b['@@rrb/table'];
-	var subLengths = sumOfLengths(aTable) + sumOfLengths(bTable);
+	var subLengths = 0;
+	subLengths += heightOf(a) == 0 ? 0 : sumOfLengths(aTable);
+	subLengths += heightOf(b) == 0 ? 0 : sumOfLengths(bTable);
 
 	return (aTable.length + bTable.length) - (Math.floor((subLengths - 1) / M) + 1);
 }
