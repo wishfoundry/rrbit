@@ -248,11 +248,11 @@ describe("collection tests", function() {
 		it("slice repeatedly", function() {
 			var n = 31;
 
-			var x = List.range(0, 40*n);
-			x = List.slice(n, 4*n, x);
-			x = List.slice(n, 3*n, x);
-			x = List.slice(n, 2*n, x);
-			x = List.slice(n, n, x);
+			var x = List.range(0, 40 * n);
+				x = List.slice(n, 4 * n, x);
+				x = List.slice(n, 3 * n, x);
+				x = List.slice(n, 2 * n, x);
+				x = List.slice(n, n, x);
 
 		});
 

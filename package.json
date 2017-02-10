@@ -32,7 +32,8 @@
     "test": "mocha --compilers js:babel-core/register",
     "build": "./node_modules/.bin/babel src/index.js | ./node_modules/.bin/uglifyjs > dist/rrbit.js",
     "build-node": "./node_modules/.bin/rollup src/index.js --output lib/index.js --format cjs",
-    "build-ral": "./node_modules/.bin/rollup src/SkewList.js --output lib/ral.js --format cjs"
+    "build-ral": "./node_modules/.bin/rollup src/SkewList.js --output lib/ral.js --format cjs",
+    "build-block": "./node_modules/.bin/rollup src/Block.js --output lib/block.js --format cjs"
   },
   "keywords": [
     "immutable",
