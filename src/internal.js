@@ -36,7 +36,7 @@ export function sliceLeft(from, list) {
 
 	// Maybe the a node is not even needed, as sliced contains the whole slice.
 	if (left === listTable.length - 1) {
-		return sliced;
+		return sliced.height < list.height ? parentise(sliced, list.height) : sliced;
 	}
 
 	// Create new node.
@@ -200,6 +200,3 @@ export function push(item, list) {
 
 	return pushIfSpace(item, list) || siblise(list, createNodeWithHeight(item, heightOf(list)));
 }
-
-
-
