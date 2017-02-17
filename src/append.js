@@ -41,10 +41,11 @@ export function append(a, b) {
 	var a2TableLen = a2Table.length;
 	var b2TableLen = b2Table.length;
 
+	if (a2TableLen === 0) return b2;
+	if (b2TableLen === 0) return a2;
+
 	// Check if both nodes can be crunshed together.
 	if (a2TableLen + b2TableLen <= M) {
-		if (a2Table.length === 0) return b2;
-		if (b2Table.length === 0) return a2;
 
 		// Adjust .table and .lengths
 		a2['@@rrb/table'] = a2Table.concat(b2Table);
@@ -93,8 +94,8 @@ function __append(a, b) {
 			var a0 = tuple[0];
 			var b0 = tuple[1];
 
-				insertRight(a, b0);
-			insertLeft(b, a0);
+			insertRight(a, a0);
+			insertLeft(b, b0);
 
 		} else if (aHeight > bHeight) {
 			a = nodeCopy(a);
@@ -166,13 +167,14 @@ function insertLeft(parent, node) {
  */
 function shuffle(a, b, toRemove) {
 	var newA = allocate(heightOf(a), Math.min(M, tableLenOf(a) + tableLenOf(b) - toRemove));
-	var newB = allocate(heightOf(a), tableLenOf(newA) - (tableLenOf(a) + tableLenOf(b) - toRemove));
+	var newB = allocate(heightOf(a), Math.max(0,tableLenOf(newA) - (tableLenOf(a) + tableLenOf(b) - toRemove)));
 
 	// Skip the slots with size M. More precise: copy the slot references
 	// to the new node
 	var read = 0;
-	while (tableOf(getEither(tableOf(a), tableOf(a), read)).length % M === 0) {
-		setEither(tableOf(newA), tableOf(newB), read, getEither(tableOf(a), tableOf(b), read));
+	var either;
+	while ((either = tableOf(getEither(tableOf(a), tableOf(b), read)), either.length % M === 0)) {
+		setEither(tableOf(newA), tableOf(newB), read, either);
 		setEither(lengthsOf(newA), lengthsOf(newB), read, getEither(lengthsOf(a), lengthsOf(b), read));
 		read++;
 	}
@@ -185,7 +187,8 @@ function shuffle(a, b, toRemove) {
 
 	// If the current slot is still containing data, then there will be at
 	// least one more write, so we do not break this loop yet.
-	while (read - write - (tableLenOf(slot) > 0 ? 1 : 0) < toRemove) {
+	// WSH: stop when read exceeds b.length
+	while (read - write - (tableLenOf(slot) > 0 ? 1 : 0) < toRemove && read - a.length < b.length) {
 		// Find out the max possible items for copying.
 		var source = getEither(tableOf(a), tableOf(b), read);
 		var to = Math.min(M - tableLenOf(slot), tableLenOf(source));
@@ -254,7 +257,7 @@ function saveSlot(aList, bList, index, slot) {
 	setEither(tableOf(aList), tableOf(bList), index, slot);
 
 	var isInFirst = (index === 0 || index === lengthsOf(aList).length);
-	var len = isInFirst ? 0 : getEither(lengthsOf(aList), lengthsOf(aList), index - 1);
+	var len = isInFirst ? 0 : getEither(lengthsOf(aList), lengthsOf(bList), index - 1);
 
 	setEither(lengthsOf(aList), lengthsOf(bList), index, len + length(slot));
 }
