@@ -1,4 +1,4 @@
-import {Block16, Block8, Block4} from '../src/Block';
+import {Block16, Block8, Block4} from '../src/experimental/Block';
 import {expect} from 'chai';
 
 describe("collection tests", function() {

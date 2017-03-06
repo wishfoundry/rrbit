@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 // import 'babel-polyfill';
 
-import List from '../src/SkewList';
+import List from '../src/experimental/SkewList';
 
 function range(from, to) {
 	var list = new List();
