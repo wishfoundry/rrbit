@@ -117,3 +117,7 @@ export function one(value) {
 }
 
 export const emptyTransientBlock = new Array(2);
+
+export function isRRB(rrb) {
+	return rrb instanceof Node;
+}

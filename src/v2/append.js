@@ -42,6 +42,41 @@ export function append(value, list) {
 	return x;
 }
 
+/**
+ * mutable append
+ *
+ * a more performant version meant for use in builders or private loops
+ *
+ * @param value
+ * @param list
+ * @return {*}
+ */
+export function appendǃ(value, list) {
+	if (list.endIndex === 0) {
+		return one(value);
+	}
+
+	var x = fromFocusOf(list);
+	x.endIndex = list.endIndex;
+	x.transient = list.transient;
+	x.endIndex = list.endIndex + 1
+
+	focusOnLastBlockǃ(list.endIndex, x);
+
+	var elemIndexInBlock = (list.endIndex - x.focusStart) & 31;
+	if  (elemIndexInBlock === 0) {
+		// next element will go in a new block position
+		appendBackNewBlock(value, list.endIndex, x)
+	} else {
+		// if next element will go in current focused block
+		x.focusEnd = x.endIndex;
+		x.display0[elemIndexInBlock] = value;
+		makeTransientIfNeeded(x)
+	}
+
+	return x;
+}
+
 
 function appendOnCurrentBlock(value, elemIndexInBlock, list) {
 
