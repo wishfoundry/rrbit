@@ -3,6 +3,7 @@ var suite = Benchmark.Suite('push items to list performance');
 require('babel-polyfill');
 var runSuite = require('./runSuite');
 var Block = require('../lib/block');
+var LinkedList = require('../src/experimental/LinkedList');
 
 var Block4 = Block.Block4;
 var Block8 = Block.Block8;
@@ -29,23 +30,23 @@ var ARRAY32 = Array.apply(0, Array(32)).map((_, i) => i)
 
 
 suite
-	.add('Array: update 32', function() {
-		var ll = ARRAY32.slice();
-		var n = rand(32);
-		ll.splice(n, 1, n);
-	})
-	.add('Block4: update ', function() {
-		var n = rand(32);
-		var ll = LIST4.update(n, n)
-	})
-	.add('Block8: update ', function() {
-		var n = rand(32);
-		var ll = LIST8.update(n, n)
-	})
-	.add('Block16: update ', function() {
-		var n = rand(32);
-		var ll = LIST16.update(n, n)
-	})
+	// .add('Array: update 32', function() {
+	// 	var ll = ARRAY32.slice();
+	// 	var n = rand(32);
+	// 	ll.splice(n, 1, n);
+	// })
+	// .add('Block4: update ', function() {
+	// 	var n = rand(32);
+	// 	var ll = LIST4.update(n, n)
+	// })
+	// .add('Block8: update ', function() {
+	// 	var n = rand(32);
+	// 	var ll = LIST8.update(n, n)
+	// })
+	// .add('Block16: update ', function() {
+	// 	var n = rand(32);
+	// 	var ll = LIST16.update(n, n)
+	// })
 	.add('Array: push 32', function() {
 		var list = [];
 		var i = 32;
@@ -54,38 +55,55 @@ suite
 			list.push(i)
 		}
 	})
-	.add('Array: push 16', function() {
-		// check if two list of 16 are faster
-		var list = [];
-		var i = 16;
-		while (i--) {
-			list = list.slice();
-			list.push(i)
-		}
-		i = 16;
-		while (i--) {
-			list = list.slice();
-			list.push(i)
-		}
-	})
-	.add('Block4: push 32', function() {
-		var list = Block4.empty();
-		var i = 32;
-		while (i--)
-			list = list.append(i);
-	})
-	.add('Block8: push 32', function() {
-		var list = Block8.empty();
-		var i = 32;
-		while (i--) {
-			list = list.append(i);
-		}
-	})
+	// .add('Array: push 2x16', function() {
+	// 	// check if two list of 16 are faster
+	// 	var list = [];
+	// 	var i = 16;
+	// 	while (i--) {
+	// 		list = list.slice();
+	// 		list.push(i)
+	// 	}
+	// 	i = 16;
+	// 	while (i--) {
+	// 		list = list.slice();
+	// 		list.push(i)
+	// 	}
+	// })
+	// .add('Block4: push 32', function() {
+	// 	var list = Block4.empty();
+	// 	var i = 32;
+	// 	while (i--)
+	// 		list = list.append(i);
+	// })
+	// .add('Block8: push 32', function() {
+	// 	var list = Block8.empty();
+	// 	var i = 32;
+	// 	while (i--) {
+	// 		list = list.append(i);
+	// 	}
+	// })
 	.add('Block16: push 32', function() {
 		var list = Block16.empty();
 		var i = 16;
 		while (i--)
 			list = list.append(i);
+	})
+	.add('LinkedList: push 32', function() {
+		var list = LinkedList.one(32)
+		var i = 31;
+		while (i--)
+			list = LinkedList.add(i, list);
+
+		list = LinkedList.toArray(list);
+	})
+
+	/* to know fastest possible */
+	.add('Array: mutable push 32', function() {
+		var list = [];
+		var i = 32;
+		while (i--) {
+			list.push(i)
+		}
 	})
 
 
