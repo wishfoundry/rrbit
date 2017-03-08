@@ -113,9 +113,11 @@ export function last(arr) {
 
 // int arrays do not allow nulls(that is to say null is always 0)
 export function makeIntArray(length) {
-	return Array.apply(null, {length: length}).map(function() {
-		return 0;
-	});
+	var ints = new Array(length);
+	for (var i = 0; length > i; i++) {
+		ints[i] = 0
+	}
+	return ints;
 }
 // int arrays must not return null
 export function aIntGet(i, arr) {

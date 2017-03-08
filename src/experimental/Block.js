@@ -150,6 +150,7 @@ function BlockFactory(LEAFWIDTH) {
 		},
 
 		prepend(value) {
+			// we can optimize this by adding a startIndex/offset property
 			var src = this.tree;
 			var len = this.length + 1;
 			var tree = emptyTree(len);

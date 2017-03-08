@@ -165,8 +165,8 @@ function treeSizeRecur(node, currentDepth, acc) {
 		if (currentDepth == 1) {
 			//TODO: major HACK! does not belong
 			// need to purge all cases where node is null
-			if (!node)
-				return acc + 32;
+			// if (!node)
+			// 	return acc + 32;
 
 			return acc + node.length
 		}

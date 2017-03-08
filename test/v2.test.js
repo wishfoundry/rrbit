@@ -4,8 +4,28 @@ import {prepend} from '../src/v2/prepend';
 import nth from '../src/v2/nth';
 import {expect} from 'chai';
 
+function chunk(str, size) {
+	var len = str.length,
+		chunks = []
+	for (var i = 0, len = str.length; len > i; i += size) {
+		chunks.push(str.substring(i, i + size));
+	}
+	return chunks;
+}
+
+function pretty(number) {
+	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 describe("rrb with focus tests", function() {
-	var depths = [32, 1024, 32768, 1048576,33554432, 1073741824]
+	var depths = [
+		32, // 0 depth (leaf only)
+		1024, // 1 depth (default min depth)
+		32768, // 2 depth
+		1048576, // 3 depth (1M)
+		33554432, // 4 depth (33.5M)
+		1073741824 // 5 depth (1B) usually will cause out-of-memory by this point in current JS engines
+	]
 
 	describe("basic construction tests", function() {
 		var none;
@@ -16,35 +36,24 @@ describe("rrb with focus tests", function() {
 			uno = one(10);
 		});
 
-		it('append 32 test', function() {
-			var vec = empty();
-			for (var i = 0; 32 > i; i++) {
-				vec = append(i, vec);
-			}
-		});
+		function testSize(MAX, timeout) {
+			it(`append ${pretty(MAX)} test`, function() {
+				this.timeout(timeout || 2000)
+				var vec = empty();
+				for (var i = 0; MAX > i; i++) {
+					vec = append(i, vec);
+				}
+			});
+		}
 
-		it('append 10 000 test', function() {
-			var vec = empty();
-			for (var i = 0; 10000 > i; i++) {
-				vec = append(i, vec);
-			}
-		});
+		for (var MAX of [32, 1024, 32768, 1048576]) {
+			testSize(MAX, 1000)
+		}
 
-		it('append 100 000 test', function() {
-			var vec = empty();
-			for (var i = 0; 100000 > i; i++) {
-				vec = append(i, vec);
-			}
-		});
+		// testSize(33554432, 4000);
+		// testSize(1073741824, 4000);
 
-		it('append 1 000 000 test', function() {
-			var vec = empty();
-			for (var i = 0; 1000000 > i; i++) {
-				vec = append(i, vec);
-			}
-		});
-
-		it.skip('append 1 000 000 native test', function() {
+		it.skip('append 1,000,000 native test', function() {
 			var vec = [];
 			for (var i = 0; 1000000 > i; i++) {
 				vec.push(i);
@@ -54,9 +63,10 @@ describe("rrb with focus tests", function() {
 
 	describe('prepend tests', function() {
 		var pvec = empty();
-		var MAX = 10000;
+		// var MAX = 10000;
+		var MAX = 100;
 
-		it('prepend 1 000 000 test', function() {
+		it(`prepend ${pretty(MAX)} test`, function() {
 			//*
 			for (var i = 0; MAX > i; i++) {
 				pvec = prepend(i, pvec);
@@ -73,9 +83,22 @@ describe("rrb with focus tests", function() {
 
 		});
 
-		it('prepend 1 000 000 ordering test', function() {
+		it(`prepend ${pretty(MAX)} ordering test`, function() {
 			for (var i = MAX; i--;) {
 				expect(nth(i, pvec, 'missing')).to.equal(i);
+			}
+		});
+
+		it.skip('prepend 1,000,000 native test', function() {
+			this.timeout(5000)
+			// var MAX = 1000000;// stop-the-world sec
+			var MAX = 500000; // 2.8 sec
+			// var MAX = 100000; // 2.8 sec
+			// var MAX = 10000;  // 13 msec
+			// var MAX = 1000;   // 0.13 sec
+			var vec = [];
+			for (var i = 0; MAX > i; i++) {
+				vec.unshift(i);
 			}
 		});
 	})
@@ -94,6 +117,7 @@ describe("rrb with focus tests", function() {
 			for (var i = 0; MAX > i; i++) {
 				expect(nth(i, vec)).to.equal(i);
 			}
+			expect(vec.endIndex).to.equal(MAX)
 		})
 	})
 
