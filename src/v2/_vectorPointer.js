@@ -582,56 +582,40 @@ function copyAndIncLeftRoot(node, transient, currentLevel) {
 }
 
 export function stabilizeDisplayPath(depth, focus, list) {
-	if (depth <= 1) return;
+	switch (depth) {
+		case 1:
+		   return;
 
-	list.display1[(focus >> 5) & 31] = list.display0;
-	if (depth <= 2) return;
+		case 2 :
+		   list.display1[(focus>>5) & 31] = list.display0;
+		   return;
 
-	list.display2[(focus >> 10) & 31] = list.display1;
-	if (depth <= 3) return;
+		case 3 :
+		   list.display2[(focus >> 10) & 31] = list.display1;
+		   list.display1[(focus >> 5 ) & 31] = list.display0;
+		   return;
 
-	list.display3[(focus >> 15) & 31] = list.display2;
-	if (depth <= 4) return;
+		case 4 :
+		   list.display3[(focus >> 15) & 31] = list.display2;
+		   list.display2[(focus >> 10) & 31] = list.display1;
+		   list.display1[(focus >> 5 ) & 31] = list.display0;
+		   return;
 
-	list.display4[(focus >> 20) & 31] = list.display3;
-	if (depth > 5) {
-		display5[(focus >> 25) & 31] = list.display4;
+		case 5 :
+		   list.display4[(focus >> 20) & 31] = list.display3;
+		   list.display3[(focus >> 15) & 31] = list.display2;
+		   list.display2[(focus >> 10) & 31] = list.display1;
+		   list.display1[(focus >> 5 ) & 31] = list.display0;
+		   return;
+
+		case 6 :
+		   list.display5[(focus >> 25) & 31] = list.display4;
+		   list.display4[(focus >> 20) & 31] = list.display3;
+		   list.display3[(focus >> 15) & 31] = list.display2;
+		   list.display2[(focus >> 10) & 31] = list.display1;
+		   list.display1[(focus >> 5 ) & 31] = list.display0;
+		   return
 	}
-
-	// switch (depth) {
-	// 	case 1:
-	// 	   return;
-	//
-	// 	case 2 :
-	// 	   list.display1[(focus>>5) & 31] = list.display0;
-	// 	   return;
-	//
-	// 	case 3 :
-	// 	   list.display2[(focus >> 10) & 31] = list.display1;
-	// 	   list.display1[(focus >> 5 ) & 31] = list.display0;
-	// 	   return;
-	//
-	// 	case 4 :
-	// 	   list.display3[(focus >> 15) & 31] = list.display2;
-	// 	   list.display2[(focus >> 10) & 31] = list.display1;
-	// 	   list.display1[(focus >> 5 ) & 31] = list.display0;
-	// 	   return;
-	//
-	// 	case 5 :
-	// 	   list.display4[(focus >> 20) & 31] = list.display3;
-	// 	   list.display3[(focus >> 15) & 31] = list.display2;
-	// 	   list.display2[(focus >> 10) & 31] = list.display1;
-	// 	   list.display1[(focus >> 5 ) & 31] = list.display0;
-	// 	   return;
-	//
-	// 	case 6 :
-	// 	   list.display5[(focus >> 25) & 31] = list.display4;
-	// 	   list.display4[(focus >> 20) & 31] = list.display3;
-	// 	   list.display3[(focus >> 15) & 31] = list.display2;
-	// 	   list.display2[(focus >> 10) & 31] = list.display1;
-	// 	   list.display1[(focus >> 5 ) & 31] = list.display0;
-	// 	   return
-	// }
 }
 
 export function computeBranching(displayLeft, concat, displayRight, currentDepth) {
