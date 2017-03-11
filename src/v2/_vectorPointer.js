@@ -7,7 +7,7 @@ export function normalize(_depth, rrb) {
 	copyDisplaysAndStabilizeDisplayPath(currentLevel, stabilizationIndex, rrb);
 
 	// todo: convert loop to switch
-	if (currentLevel <= _depth) {
+	if (currentLevel < _depth) {
 		var display = rrb['display' + currentLevel];
 		do {
 			var newDisplay = display.slice(0);

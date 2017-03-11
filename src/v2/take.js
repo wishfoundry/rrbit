@@ -118,8 +118,8 @@ export function take(n, rrb) {
 
 function cleanTopTake(cutIndex, rrb){
 	var newDepth = 0;
-	// var nulled = null;
-	var nulled = []; //in theory, null should work ¯\_(ツ)_/¯
+	var nulled = null;
+	// var nulled = []; //in theory, null should work ¯\_(ツ)_/¯
 
 	var {depth} = rrb;
 	if (depth == 1)

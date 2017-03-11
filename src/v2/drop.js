@@ -91,8 +91,8 @@ export function drop(n, rrb) {
 function  cleanTopDrop(cutIndex, rrb) {
 	var newDepth = 0;
 
-	// var nulled = null;
-	var nulled = []; //in theory, null should work ¯\_(ツ)_/¯
+	var nulled = null;
+	// var nulled = []; //in theory, null should work ¯\_(ツ)_/¯
 
 	var {
 		depth,

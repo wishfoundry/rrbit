@@ -88,7 +88,7 @@ function appendOnCurrentBlock(value, elemIndexInBlock, list) {
 	makeTransientIfNeeded(list)
 }
 
-function appendBackNewBlock(elem, _endIndex, list) {
+export function appendBackNewBlock(elem, _endIndex, list) {
 	var oldDepth = list.depth
 	var newRelaxedIndex = _endIndex - list.focusStart + list.focusRelax;
 	var focusJoined = list.focus | list.focusRelax
