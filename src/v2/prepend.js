@@ -1,4 +1,4 @@
-import {one, fromFocusOf} from './_constructors';
+import {empty, fromFocusOf} from './_constructors';
 import {
 	focusOnFirstBlockǃ,
 	makeTransientIfNeeded,
@@ -15,7 +15,10 @@ import {arraycopy} from './_array';
 export function prepend(value, list) {
 
 	if (list.endIndex === 0) {
-		return one(value);
+		var vec = empty();
+		vec.endIndex = 1;
+		vec.display0 = [value];
+		return vec;
 	}
 
 	var x = fromFocusOf(list);

@@ -1,4 +1,4 @@
-import {one, fromFocusOf} from './_constructors';
+import {empty, fromFocusOf} from './_constructors';
 import {
 	focusOnLastBlockǃ,
 	makeTransientIfNeeded,
@@ -17,7 +17,10 @@ import {arraycopy} from './_array';
  */
 export function append(value, list) {
 	if (list.endIndex === 0) {
-		return one(value);
+		var vec = empty();
+		vec.endIndex = 1;
+		vec.display0 = [value];
+		return vec;
 	}
 
 	var x = fromFocusOf(list);
@@ -53,7 +56,10 @@ export function append(value, list) {
  */
 export function appendǃ(value, list) {
 	if (list.endIndex === 0) {
-		return one(value);
+		var vec = empty();
+		vec.endIndex = 1;
+		vec.display0 = [value];
+		return vec;
 	}
 
 	var x = fromFocusOf(list);
@@ -156,66 +162,3 @@ export function appendBackNewBlock(elem, _endIndex, list) {
 	list.display0[0] = elem
 	list.transient = true;
 }
-
-// function appendBackNewBlock(elem, _endIndex, list) {
-// 		var oldDepth = list.depth
-// 		var newRelaxedIndex = _endIndex - focusStart + focusRelax
-// 		var focusJoined = focus | focusRelax
-// 		var xor = newRelaxedIndex ^ focusJoined
-// 		var _transient = transient
-// 		setupNewBlockInNextBranch(xor, list.transient)
-// 	/* setupNewBlockInNextBranch(...) increased the depth of the tree */
-// 		if  (oldDepth == depth) {
-// 			var i = xor < 1024 ? 2 :
-// 				(xor < 32768 ? 3 :
-// 					(xor < 1048576 ? 4 :
-// 						(xor < 33554432 ? 5 :
-// 							6)));
-//
-// 	if (i < oldDepth) {
-// 		var _focusDepth = focusDepth
-// 		var display: Array[AnyRef] = i match {
-// 		case 2 => display2
-// 		case 3 => display3
-// 		case 4 => display4
-// 		case 5 => display5
-// 		}
-// 		do {
-// 			val displayLen = display.length - 1
-// 			val oldSizes = display(displayLen)
-// 			val newSizes: Array[Int] =
-// 			if (i >= _focusDepth && oldSizes != null) {
-// 				makeTransientSizes(oldSizes.asInstanceOf[Array[Int]], displayLen - 1)
-// 			} else null
-//
-// 			val newDisplay = new Array[AnyRef](display.length)
-// 			System.arraycopy(display, 0, newDisplay, 0, displayLen - 1)
-// 			if (i >= _focusDepth)
-// 				newDisplay(displayLen) = newSizes
-//
-// 			i match {
-// 			case 2 =>
-// 				display2 = newDisplay
-// 				display = display3
-// 			case 3 =>
-// 				display3 = newDisplay
-// 				display = display4
-// 			case 4 =>
-// 				display4 = newDisplay
-// 				display = display5
-// 			case 5 =>
-// 				display5 = newDisplay
-// 			}
-// 			i += 1
-// 		} while (i < oldDepth)
-// 	}
-// }
-//
-// if (oldDepth == focusDepth)
-// 	initFocus(_endIndex, 0, _endIndex + 1, depth, 0)
-// else
-// 	initFocus(0, _endIndex, _endIndex + 1, 1, newRelaxedIndex & -32)
-//
-// display0(0) = elem.asInstanceOf[AnyRef]
-// transient = true
-// }

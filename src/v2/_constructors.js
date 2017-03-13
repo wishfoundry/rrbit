@@ -37,7 +37,21 @@ function Node(endIndex) {
 
 Node.prototype.empty = empty;
 
-export function empty() {
+//todo rename endIndex to length
+Object.defineProperty(Node.prototype, 'length', {
+	get: function() {
+		return this.endIndex
+	},
+	set: function(value) {
+		this.endIndex = value;
+	}
+});
+
+export function withLength(len) {
+	return new Node(len);
+}
+
+function _empty() {
 	var list = withLength(0);
 	list.focus = 0;
 	list.focusStart = 0;
@@ -62,33 +76,22 @@ export function empty() {
 	return list;
 }
 
-export const EMPTY = empty();
+const EMPTY = _empty();
+
+// we do our best to support strict equality comparison if empty
+export function empty() {
+	return EMPTY;
+}
 
 
 export function fromFocusOf(src) {
-	var list = withLength(src.length);
+	var list = withLength(src.endIndex);
 	list.focusStart = src.focusStart;
 	list.focusDepth = src.focusDepth;
 	list.focusRelax = src.focusRelax;
 	list.focusEnd = src.focusEnd;
 	list.focus = src.focus;
 	list.depth = src.depth;
-
-	//todo: can we safely reuse refs, or is cloning required?
-	// switch (src.depth) {
-	// 	case 6:
-	// 		list.display5 = src.display5.slice(0);
-	// 	case 5:
-	// 		list.display4 = src.display4.slice(0);
-	// 	case 4:
-	// 		list.display3 = src.display3.slice(0);
-	// 	case 3:
-	// 		list.display2 = src.display2.slice(0);
-	// 	case 2:
-	// 		list.display1 = src.display1.slice(0);
-	// 	case 1:
-	// 		list.display0 = src.display0.slice(0);
-	// }
 
 	// there's a small hack used here with endIndex, where we mutate a shared display
 	list.display0 = src.display0
@@ -98,19 +101,6 @@ export function fromFocusOf(src) {
 	list.display4 = src.display4
 	list.display5 = src.display5
 
-	return list;
-}
-
-function fromRoot() {}
-
-export function withLength(len) {
-	return new Node(len);
-}
-
-export function one(value) {
-	var list = empty();
-	list.endIndex = 1;
-	list.display0 = [value];
 	return list;
 }
 
