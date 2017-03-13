@@ -269,7 +269,7 @@ function gotoPosFromRoot(index, rrb) {
 	var _focusRelax = 0;
 
 	if (depth > 1) {
-		var display = rrb['display' + depth - 1];
+		var display = rrb['display' + (depth - 1)];
 		do {
 			var sizes = display[display.length - 1];
 			if (sizes == null) {

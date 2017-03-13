@@ -40,7 +40,7 @@ function range(from, to) {
 
 describe("rrb with focus tests", function() {
 
-	describe("basic construction tests", function() {
+	describe.skip("basic construction tests", function() {
 		var none;
 		var uno;
 
@@ -116,7 +116,7 @@ describe("rrb with focus tests", function() {
 		});
 	})
 
-	describe('ordered get/set confirmation', function() {
+	describe.skip('ordered get/set confirmation', function() {
 
 		it('retrieves 10000 items in same order as inserted', function() {
 			var MAX = 10000
@@ -136,18 +136,22 @@ describe("rrb with focus tests", function() {
 	describe('concat tests', function() {
 
 		it('joins two lists of 32 together', function() {
-			var vec = range(0, 32)
+			var vec = empty();
+
+			for (var i = 0; 33 > i; i++) {
+				vec = append(i, vec);
+			}
 
 			var joined = concat(vec, vec);
 			expect(joined.endIndex).to.equal(64)
 		})
 
-		it('joins two lists of 1000 together', function() {
-			var vec = range(0, 1000)
-
-			var joined = concat(vec, vec);
-			expect(joined.endIndex).to.equal(2000)
-		})
+		// it('joins two lists of 1000 together', function() {
+		// 	var vec = range(0, 1000)
+		//
+		// 	var joined = concat(vec, vec);
+		// 	expect(joined.endIndex).to.equal(2000)
+		// })
 	})
 
 })

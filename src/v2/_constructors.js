@@ -108,27 +108,9 @@ export function withLength(len) {
 }
 
 export function one(value) {
-	var list = withLength(1);
-	list.focus = 0;
-	list.focusStart = 0;
-	list.focusEnd = 1;
-	list.focusDepth = 1;
-	list.focusRelax = 0;
+	var list = empty();
+	list.endIndex = 1;
 	list.display0 = [value];
-	/*
-	list.display1 = [];
-	list.display2 = [];
-	list.display3 = [];
-	list.display4 = [];
-	list.display5 = [];
-	/*/
-	 list.display1 = null;
-	 list.display2 = null;
-	 list.display3 = null;
-	 list.display4 = null;
-	 list.display5 = null;
-	 //*/
-	list.depth = 1;
 	return list;
 }
 
