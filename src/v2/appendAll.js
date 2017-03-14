@@ -119,7 +119,9 @@ function appendTreesǃ(left, that) {
 		return initFromRoot(concat, currentSize <= 32 ? 1 : 2, left);
 	}
 
-	if ((that.focus & -32) == 0) {
+	// left should be focused on last leaf
+	// but for right, we need the first leaf
+	if (((that.focus | that.focusRelax) & -32) == 0) {
 		switch (maxDepth) {
 			case 6 :
 				d5 = that.display5;
@@ -135,37 +137,17 @@ function appendTreesǃ(left, that) {
 		}
 	} else {
 		switch (maxDepth) {
-			case 2 :
-				d1 = that.display1
-				d0 = d1 ? that.display0 : d1[0]
-				break;
-			case 3 :
-				d2 = that.display2
-				d1 = d2 ? that.display1 : d2[0]
-				d0 = d1 ? that.display0 : d1[0]
-				break
-
-			case 4 :
-				d3 = that.display3
-				d2 = d3 ? that.display2 : d3[0]
-				d1 = d2 ? that.display1 : d2[0]
-				d0 = d1 ? that.display0 : d1[0]
-				break;
-			case 5 :
-				d4 = that.display4
-				d3 = d4 ? that.display3 : d4[0]
-				d2 = d3 ? that.display2 : d3[0]
-				d1 = d2 ? that.display1 : d2[0]
-				d0 = d1 ? that.display0 : d1[0]
-				break;
 			case 6 :
-				d5 = that.display5
-				d4 = d5 ? that.display4 : d5[0]
-				d3 = d4 ? that.display3 : d4[0]
-				d2 = d3 ? that.display2 : d3[0]
-				d1 = d2 ? that.display1 : d2[0]
-				d0 = d1 ? that.display0 : d1[0]
-				break;
+				d5 = that.display5;
+			case 5 :
+				d4 = d5 ? d5[0] : that.display4;
+			case 4 :
+				d3 = d4 ? d4[0] : that.display3;
+			case 3 :
+				d2 = d3 ? d3[0] : that.display2;
+			case 2 :
+				d1 = d2 ? d2[0] : that.display1;
+				d0 = d1 ? d1[0] : that.display0;
 		}
 	}
 

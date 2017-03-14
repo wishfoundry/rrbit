@@ -143,7 +143,12 @@ describe("rrb with focus tests", function() {
 			}
 
 			var joined = concat(vec, vec);
-			expect(joined.endIndex).to.equal(64)
+			expect(joined.endIndex).to.equal(66)
+
+			for (var i = 0; 33 > i; i++) {
+				expect(nth(i, joined)).to.equal(i);
+				//expect(nth(i + 33, vec)).to.equal(i);
+			}
 		})
 
 		// it('joins two lists of 1000 together', function() {
