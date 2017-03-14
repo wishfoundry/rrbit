@@ -27,6 +27,11 @@ var ARRAY32 = Array.apply(0, Array(32)).map((_, i) => i)
  * test array of 32, as that's what our i
  */
 
+// current results:
+// Array: push 32              164318.83 op/s ±  2.17%   (81 samples)
+// Block16: push 32            212407.96 op/s ±  1.99%   (82 samples)
+// LinkedList: push 32        1633893.77 op/s ±  1.27%   (84 samples)
+// Array: mutable push 32     6082137.68 op/s ±  1.35%   (83 samples)
 
 
 suite

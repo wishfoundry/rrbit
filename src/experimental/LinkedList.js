@@ -71,4 +71,5 @@ module.exports = {
 	one: one,
 	add: add,
 	nth: nth,
+	toArray: toArray
 }
