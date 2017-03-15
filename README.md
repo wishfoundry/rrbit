@@ -59,15 +59,15 @@ v2 rrb(w/focus)      35464.07 op/s ±  2.80%   (88 samples)
 ```
 
 ```
-append items to list performance(push) - 1k length
+push items to list performance - 1k
 -------------------------------------------------------
-immutable-js               1928.38 op/s ±  1.95%   (85 samples)
-imm methods                1632.30 op/s ±  1.30%   (86 samples)
-native(mutating)         203409.15 op/s ±  1.49%   (88 samples)
-native slice()+push()       989.11 op/s ±  1.16%   (87 samples)
-mori                      28209.22 op/s ±  1.50%   (85 samples)
-v1 rrb list                 391.75 op/s ±  1.80%   (83 samples)
-v2 focusable(fast)        11905.22 op/s ±  1.19%   (90 samples)
-v2 focusable(standard)     3940.16 op/s ±  1.34%   (88 samples)
+immutable-js              1831.85 op/s ±  1.89%   (86 samples)
+imm methods               1731.02 op/s ±  1.20%   (89 samples)
+native                  212030.06 op/s ±  1.26%   (90 samples)
+native slice() + push()   1052.16 op/s ±  1.05%   (84 samples)
+mori                     29585.35 op/s ±  1.12%   (90 samples)
+v1 rrb list                433.04 op/s ±  1.03%   (87 samples)
+focusable(fast)          30351.12 op/s ±  1.25%   (89 samples)
+focusable                 3816.54 op/s ±  1.42%   (89 samples)
 -------------------------------------------------------
 ```

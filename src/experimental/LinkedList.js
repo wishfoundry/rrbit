@@ -35,7 +35,38 @@ function nth(i, list, notFound) {
 
 	return notFound;
 }
+// easy, drop the tail items until the length is n
+function take(n, list) {
+	while(list && list.length > n) {
+		list = list.link;
+	}
+	return list
+}
 
+// harder, have to drop head by first walking back from end
+function drop(n, list) {
+	if (n >= list.length) return;
+	var newLen = list.length - n;
+	var temp = new Array(newLen);
+	while(newLen) {
+		temp[--i] = list.data;
+		list = list.link
+	}
+	// for (var i = 0; newLen > i; i++) {
+	// 	temp[i] = list.data;
+	// 	list = list.link
+	// }
+	return fromArray(temp)
+}
+
+function fromArray(arr) {
+	if (!arr.length) return;
+	var list = one(arr[0]);
+	for (var i = 1, l = arr.length; l > i; i++) {
+		list = add(arr[i], list)
+	}
+	return list;
+}
 function toArray(list) {
 	var i = 0;
 	var arr = new Array(list.length);
@@ -58,18 +89,12 @@ function toArrayReverse(list) {
 	return arr;
 }
 
-function anyDirToArray(list) {
-	var len = Math.abs(list.length),
-		out = new Array(len);
-	while (list) {
-
-	}
-}
-
 
 module.exports = {
 	one: one,
 	add: add,
 	nth: nth,
+	take: take,
+	drop: drop,
 	toArray: toArray
 }

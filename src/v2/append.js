@@ -56,31 +56,27 @@ export function append(value, list) {
  */
 export function appendǃ(value, list) {
 	if (list.endIndex === 0) {
-		var vec = empty();
-		vec.endIndex = 1;
-		vec.display0 = [value];
-		return vec;
+		list.endIndex = 1;
+		list.display0 = [value];
+		return list;
 	}
 
-	var x = fromFocusOf(list);
-	x.endIndex = list.endIndex;
-	x.transient = list.transient;
-	x.endIndex = list.endIndex + 1
+	list.endIndex += 1
 
-	focusOnLastBlockǃ(list.endIndex, x);
+	focusOnLastBlockǃ(list.endIndex, list);
 
-	var elemIndexInBlock = (list.endIndex - x.focusStart) & 31;
+	var elemIndexInBlock = (list.endIndex - list.focusStart) & 31;
 	if  (elemIndexInBlock === 0) {
 		// next element will go in a new block position
-		appendBackNewBlock(value, list.endIndex, x)
+		appendBackNewBlock(value, list.endIndex, list)
 	} else {
 		// if next element will go in current focused block
-		x.focusEnd = x.endIndex;
-		x.display0[elemIndexInBlock] = value;
-		makeTransientIfNeeded(x)
+		list.focusEnd = list.endIndex;
+		list.display0[elemIndexInBlock] = value;
+		makeTransientIfNeeded(list)
 	}
 
-	return x;
+	return list;
 }
 
 
