@@ -1,10 +1,23 @@
+// appending two lists performance - 100000
+// -------------------------------------------------------
+// 	immutable-js           39.05 op/s ±  1.43%   (51 samples)
+// seamless-immutable      13.68 op/s ±  3.54%   (38 samples)
+// native concat         1099.11 op/s ±  7.06%   (72 samples)
+// native push            228.72 op/s ±  6.64%   (75 samples)
+// mori              18741394.72 op/s ±  1.01%   (90 samples)
+// v1                  199971.94 op/s ±  0.90%   (91 samples)
+// v2(focus)            35464.07 op/s ±  2.80%   (88 samples)
+// -------------------------------------------------------
+
+
 var Benchmark = require('benchmark');
 var Imm = require('immutable');
 var seamless = require('seamless-immutable');
 var mori = require('mori');
 var iam = require('immutable-array-methods');
 var List = require('../lib')
-console.log(JSON.stringify(List));
+var v2 = require('../lib/v2')
+
 
 var SML = times(64);
 var MED = times(1024);
@@ -14,11 +27,20 @@ var LRG = times(100000);
 function times(size) {
 	return new Array(size).map(function(v,i) { return i; })
 }
+function range(size) {
+	var vec = v2.empty();
+
+	for (var i = 0; size > i; i++) {
+		vec = v2.append(i, vec);
+	}
+	return vec;
+}
 var BASE = {
 	'immutable': Imm.fromJS(LRG),
 	'seamless': seamless.from(LRG),
 	'mori': mori.toClj(LRG),
-	'rrb': List.from(LRG)
+	'rrb': List.from(LRG),
+	'v2': range(LRG.length)
 
 }
 
@@ -54,8 +76,11 @@ suite
 	.add('mori', function() {
 		var list = mori.concat(BASE.mori, BASE.mori)
 	})
-	.add('rrb', function() {
+	.add('v1', function() {
 		var list = List.append(BASE.rrb, BASE.rrb);
+	})
+	.add('v2', function() {
+		var list = v2.appendAll(BASE.v2, BASE.v2);
 	});
 
 
