@@ -19,12 +19,12 @@ export function append(value, list) {
 	if (list.endIndex === 0) {
 		var vec = empty();
 		vec.endIndex = 1;
+		vec.focusEnd = 1;
 		vec.display0 = [value];
 		return vec;
 	}
 
 	var x = fromFocusOf(list);
-	x.endIndex = list.endIndex;
 	x.transient = list.transient;
 	x.endIndex = list.endIndex + 1
 

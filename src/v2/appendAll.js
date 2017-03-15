@@ -37,7 +37,7 @@ export default function appendAll(left, right) {
 	if (right.endIndex == 0) return left;
 
 	// do short/fast append
-	if (1024 < left.endIndex && right.endIndex <= 32) {
+	if (1024 > left.endIndex && right.endIndex <= 32) {
 		return appendLeafsǃ(left, right);
 	}
 
@@ -73,17 +73,19 @@ function appendLeafsǃ(left0, right) {
 			var batchSize = Math.min(32 - elemIndexInBlock, _right.length - i)
 			var d0 = new Array(elemIndexInBlock + batchSize)
 			arraycopy(left.display0, 0, d0, 0, elemIndexInBlock)
-			arraycopy(right, i, d0, elemIndexInBlock, batchSize)
+			arraycopy(right.display0, i, d0, elemIndexInBlock, batchSize)
 			left.display0 = d0
 			currentEndIndex += batchSize
 			left.focusEnd = currentEndIndex
 			i += batchSize
 		} else /* next element will go in a new block position */ {
-			appendBackNewBlock(nth(i, right), currentEndIndex)
+			appendBackNewBlock(nth(i, right), currentEndIndex, left)
 			currentEndIndex += 1
 			i += 1
 		}
 	}
+
+	return left;
 
 }
 
@@ -122,33 +124,19 @@ function appendTreesǃ(left, that) {
 	// left should be focused on last leaf
 	// but for right, we need the first leaf
 	if (((that.focus | that.focusRelax) & -32) == 0) {
-		switch (maxDepth) {
-			case 6 :
-				d5 = that.display5;
-			case 5 :
-				d4 = that.display4;
-			case 4 :
-				d3 = that.display3;
-			case 3 :
-				d2 = that.display2;
-			case 2 :
-				d1 = that.display1;
-				d0 = that.display0;
-		}
+		d5 = that.display5;
+		d4 = that.display4;
+		d3 = that.display3;
+		d2 = that.display2;
+		d1 = that.display1;
+		d0 = that.display0;
 	} else {
-		switch (maxDepth) {
-			case 6 :
-				d5 = that.display5;
-			case 5 :
-				d4 = d5 ? d5[0] : that.display4;
-			case 4 :
-				d3 = d4 ? d4[0] : that.display3;
-			case 3 :
-				d2 = d3 ? d3[0] : that.display2;
-			case 2 :
-				d1 = d2 ? d2[0] : that.display1;
-				d0 = d1 ? d1[0] : that.display0;
-		}
+		d5 = that.display5;
+		d4 = d5 ? d5[0] : that.display4;
+		d3 = d4 ? d4[0] : that.display3;
+		d2 = d3 ? d3[0] : that.display2;
+		d1 = d2 ? d2[0] : that.display1;
+		d0 = d1 ? d1[0] : that.display0;
 	}
 
 

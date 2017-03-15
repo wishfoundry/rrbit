@@ -135,28 +135,31 @@ describe("rrb with focus tests", function() {
 
 	describe('concat tests', function() {
 
-		it('joins two lists of 32 together', function() {
-			var vec = empty();
+		function testConcatWithLength(size, tOut = 2000) {
+			it(`joins two lists of ${size} together`, function() {
+				this.timeout(tOut)
+				var vec = empty();
 
-			for (var i = 0; 33 > i; i++) {
-				vec = append(i, vec);
-			}
+				for (var i = 0; size > i; i++) {
+					vec = append(i, vec);
+				}
 
-			var joined = concat(vec, vec);
-			expect(joined.endIndex).to.equal(66)
+				var joined = concat(vec, vec);
+				expect(joined.endIndex).to.equal(size * 2)
 
-			for (var i = 0; 33 > i; i++) {
-				expect(nth(i, joined)).to.equal(i);
-				//expect(nth(i + 33, vec)).to.equal(i);
-			}
-		})
+				for (var i = 0; size > i; i++) {
+					expect(nth(i, joined)).to.equal(i);
+					expect(nth(i + size, joined)).to.equal(i);
+				}
+			})
+		}
 
-		// it('joins two lists of 1000 together', function() {
-		// 	var vec = range(0, 1000)
-		//
-		// 	var joined = concat(vec, vec);
-		// 	expect(joined.endIndex).to.equal(2000)
-		// })
+		testConcatWithLength(32);
+		testConcatWithLength(DEPTHS[1]);
+		testConcatWithLength(DEPTHS[2]);
+		testConcatWithLength(DEPTHS[3], 5000);
+
+
 	})
 
 })

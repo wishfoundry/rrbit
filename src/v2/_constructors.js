@@ -51,21 +51,14 @@ export function withLength(len) {
 	return new Node(len);
 }
 
-function _empty() {
+export function empty() {
 	var list = withLength(0);
 	list.focus = 0;
 	list.focusStart = 0;
-	list.focusEnd = 1;
+	list.focusEnd = 0;
 	list.focusDepth = 1;
 	list.focusRelax = 0;
 	list.display0 = [];
-	/*
-	 list.display1 = [];
-	 list.display2 = [];
-	 list.display3 = [];
-	 list.display4 = [];
-	 list.display5 = [];
-	 /*/
 	list.display1 = null;
 	list.display2 = null;
 	list.display3 = null;
@@ -74,13 +67,6 @@ function _empty() {
 	//*/
 	list.depth = 1;
 	return list;
-}
-
-const EMPTY = _empty();
-
-// we do our best to support strict equality comparison if empty
-export function empty() {
-	return EMPTY;
 }
 
 
