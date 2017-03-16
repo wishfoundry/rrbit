@@ -90,11 +90,20 @@ function toArrayReverse(list) {
 }
 
 
-module.exports = {
-	one: one,
-	add: add,
-	nth: nth,
-	take: take,
-	drop: drop,
-	toArray: toArray
+// module.exports = {
+// 	one: one,
+// 	add: add,
+// 	nth: nth,
+// 	take: take,
+// 	drop: drop,
+// 	toArray: toArray
+// }
+
+export {
+	one,
+	add,
+	nth,
+	take,
+	drop,
+	toArray
 }
